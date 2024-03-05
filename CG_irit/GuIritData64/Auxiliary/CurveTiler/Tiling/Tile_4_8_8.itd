@@ -1,0 +1,50 @@
+[OBJECT [transp 0]
+	[vec1 "C2P2_C0P1"] [vec2 "C0P2_C4P2"]
+	[TileTopo "02143"]
+	[ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] Tile_4_8_8
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_]  
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_4_8_8_A\";LP2,E3 0.6 1 0,E3 0.4 1 0;I2;E1;X2,0,1,1,1, 1;"]	
+	[rgb "255,255,0"] Tile_4_8_8_A
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.6 1. 0.]
+	    [0.4 1. 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_4_8_8_B\";LP2,E3 0.4 1 0,E3 0.2 0.8 0;I2;E1;X2,0,1,1,1, 1;"]	
+	[rgb "255,255,0"] Tile_4_8_8_B
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.4 1. 0.]
+	    [0.2 0.8 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_4_8_8_C\";LP2,E3 0.2 0.8 0,E3 0.2 0.6 0;I2;E1;X2,0,1,1,1, 1;"]	
+	[rgb "255,255,0"] Tile_4_8_8_C
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.2 0.8 0.]
+	    [0.2 0.6 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_4_8_8_D\";LP2,E3 0.2 0.6 0,E3 0.4 0.4 0;I2;E1;X2,0,1,1,1, 1;"]	
+	[rgb "255,255,0"] Tile_4_8_8_D
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.2 0.6 0.]
+	    [0.4 0.4 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_4_8_8_E\";LP2,E3 0.4 0.4 0,E3 0.4 0.2 0;I2;E1;X2,0,1,1,1, 1;"]	
+	[rgb "255,255,0"] Tile_4_8_8_E
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.4 0.4 0.]
+	    [0.4 0.2 0.]
+	]
+    ]
+]

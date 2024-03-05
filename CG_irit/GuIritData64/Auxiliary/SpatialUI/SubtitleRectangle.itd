@@ -1,0 +1,11 @@
+[OBJECT [OGL_OBJ_PROPS "Shading 3;Visible 1;BFaceClr 255,255,255;FFaceClr 255,255,255;IsoSClr 255,255,0;PtsClr 55,255,64;WireClr 255,255,64;CtMshClr 225,255,180;SilhClr 140,255,220;DiscntClr 255,235,200;BndryClr 255,135,215;BBClr 90,190,220;VNrmlClr 150,190,255;PNrmlsClr 235,215,255;ShadowClr 0,0,0;ContoursClr 255,255,0;IsophotesClr 255,255,0;ObjTransp 0;BBTransp 0;RelNLen 0.2;RelPtSize 0.05;RelLnWidth 1;RelNumIsos 10;RelPlnFnns 0.001;RelPgnFnns 0.005;CntrsXDir 0;CntrsYDir 0;CntrsZDir 1;CntrsNum 10;IsophXDir 0;IsophYDir 0;IsophZDir 1;IsophNum 10;UseObjClr 1;DrwBFace 1;DrwFFace 1;DrwWrfrm 0;DrwPts 0;DrwSolid 1;DrwBBox 0;DrwBBWrfrm 1;DrwBBSolid 0;DrwShdw 0;DrwRflctn 0;ClipPoles 0;DrwVNrml 0;DrwPNrml 0;RvrsNrml 0;DrwIEdge 0;DrwSSktch 0;DrwCtMsh 0;DrwPgns 1;DrwSIsos 0;DrwBndry 0;DrwSilh 0;DrwDiscnt 0;DrwCont 0;DrwIsoph 0;TwoPlsFlt 0;PgnOAprx 1;PlnOAprx 1;IgnrTrns 0;IgnrSlct 0;IgnrHglt 0;"] [HierarchyTreeIndex 0] 
+    [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+    [rgb "255,255,255"] SPLANE_000072
+    [SURFACE BEZIER 2 2 E3
+	[-0.15 -0.05 0]
+	[0.15 -0.05 0]
+
+	[-0.15 0.05 0]
+	[0.15 0.05 0]
+    ]
+]

@@ -1,0 +1,28 @@
+###############################################################################
+# Examples for Boolean operations.
+#
+#		Youngjin Park, Feb 2024.
+#
+###############################################################################
+s0 = SPHERE(vector(0,0,0),1.0);
+s1 = SPHERE(vector(1,0,0),1.0);
+c0 = CYLIN(vector(0,0,0),vector(0,0,1),1.0,4.0);
+
+save("results//sphere1.stl",s0);
+save("results//sphere2.stl",s1);
+save("results//cylinder.stl",c0);
+
+#Union Examples
+union = s0 + s1;
+save("results//union.itd", union);
+save("results//union.stl", union);
+
+#Difference Examples
+difference = s0 - s1;
+save("results//difference.stl",difference);
+
+#Intersection Examples
+intersection = s0 * s1;
+save("results//intersection.stl", intersection);
+
+exit();

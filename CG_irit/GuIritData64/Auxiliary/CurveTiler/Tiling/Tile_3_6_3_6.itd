@@ -1,0 +1,23 @@
+[OBJECT [transp 0] [rgb "255,255,0"] [TileTopo "01"]
+	[vec1 "C0P2_C0P1"] [vec2 "C0P2_C1P2"] [SkewDir 2]
+    Tile_3_6_3_6
+    [OBJECT [transp 0]
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_3_6_3_6_A\";LP3,E3 0.8 0.8 0,E3 0.5 1 0,E3 0.2 0.8 0;I2;E1;X2,0,1,1,1, 1;"]
+	[rgb "255,255,0"] Tile_3_6_3_6_A
+	[CURVE BSPLINE 3 2 E3
+	    [KV 0. 0. 0.5 1. 1.]
+	    [0.8 0.8 0.]
+	    [0.5 1. 0.]
+	    [0.2 0.8 0.]
+	]
+    ]
+    [OBJECT [transp 0]
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_3_6_3_6_B\";LP2,E3 0.2 0.8 0,E3 0.2 0.2 0;I2;E1;X2,0,1,1,1, 1;"]
+	[rgb "255,255,0"] Tile_3_6_3_6_B
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.2 0.8 0.]
+	    [0.2 0.2 0.]
+	]
+    ]
+]

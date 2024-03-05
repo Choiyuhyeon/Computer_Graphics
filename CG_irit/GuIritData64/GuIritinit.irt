@@ -1,0 +1,1650 @@
+dummy = iritState("EchoSource", false);
+
+include("../iritinit.irt");
+LastFloatFrmt = iritstate( "FloatFrmt", "%-16.14f" );
+
+interact = procedure(intrct): # Overwrite Irit's interact so there is no pause...
+    viewobj(intrct);
+
+dummy = iritState("EchoSource", false);
+#
+# Init file for GUIRIT.
+#
+
+GuIritScreamError = procedure( ErrorStr ):
+    printf( ErrorStr,  nil());
+
+prop_names = iritstate("PropagateNames", true);
+hierar_visible = iritstate("HierarchyVisible", true);
+
+GuIritSetAttrib = function( Object, rgbvalue, transpvalue, ptexturevalue, 
+			    animationvalue, IrtMdlrPrmsvalue, 
+			    IrtMdlrAuxPrmsvalue, IrtMdlrDpndsvalue, 
+			    IrtMdlrAuxDpndsvalue ):
+    if ( thisobj( "rgbvalue" ) != list_type, 
+	attrib( Object, "rgb", rgbvalue ) ):
+    if ( thisobj( "transpvalue" ) != list_type, 
+        attrib( Object, "transp", transpvalue ) ):
+    if ( thisobj( "ptexturevalue" ) != list_type, 
+        attrib( Object, "ptexture", ptexturevalue ) ):
+    if ( thisobj( "animationvalue" ) != list_type, 
+	attrib( Object, "animation", animationvalue ) ):
+    if ( thisobj( "IrtMdlrPrmsvalue" ) != list_type, 
+	attrib( Object, "IrtMdlrPrms", IrtMdlrPrmsvalue ) ):
+    if ( thisobj( "IrtMdlrAuxPrmsvalue" ) != list_type, 
+	attrib( Object, "IrtMdlrAuxPrms", IrtMdlrAuxPrmsvalue ) ):
+    if ( thisobj( "IrtMdlrDpndsvalue" ) != list_type, 
+	attrib( Object, "IrtMdlrDpnds", IrtMdlrDpndsvalue ) ):
+    if ( thisobj( "IrtMdlrAuxDpndsvalue" ) != list_type, 
+    	attrib( Object, "IrtMdlrAuxDpnds", IrtMdlrAuxDpndsvalue ) ):
+    return = Object;	
+
+#
+# CSG Tab functions
+#
+GuIrit_RatPrimSrf = function( Ratio ):
+    iritstate( "PrimRatSrfs", Ratio ):
+    return = nil();
+
+GuIrit_PrimitiveFineness  = function( FineNess ) :
+    return = nil();
+    
+GuIrit_PrimitiveType = function( PrimType ) :
+    if ( PrimType == "Polygonal", 
+         iritstate( "PrimType", 0 ),
+         if ( PrimType == "Surface", 
+              iritstate( "PrimType", 1 ),
+              if ( PrimType == "Model", 
+                   iritstate( "PrimType", 2 ),
+                   if ( PrimType == "Trivariate",
+                        iritstate( "PrimType", 3 ),
+                        if ( PrimType == "Singular Trivariate",
+                             iritstate( "PrimType", 4 ),
+                             if ( PrimType == "VModel",
+                                  iritstate( "Singular VModel", 5 ))))))):
+    return = nil();
+
+GuIrit_BOX = function( Pt, Dx, Dy, Dz, TrianglesOnly ):
+   return = box( Pt, Dx, Dy, Dz ):
+   if ( TrianglesOnly == true, 
+	return = triangl( return, false ) ):
+   GUpdateParams( Return, "IRT_MDLR_PRIM_BOX", list( Pt, Dx, Dy, Dz, 
+						     TrianglesOnly ) );
+   
+GuIrit_GBOX = function( Pt, Dx, Dy, Dz, TrianglesOnly ):
+    return = gbox( Pt, Dx, Dy, Dz ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false ) ):
+    GUpdateParams( Return, "IRT_MDLR_PRIM_GBOX", list( Pt, Dx, Dy, Dz, 
+						       TrianglesOnly ) );
+GuIrit_POINT = function( CtlPoint ):
+	return = CtlPoint:
+    GUpdateParams( Return, "IRT_MDLR_PRIM_POINT", list( list( CtlPoint ) ) );	
+							   
+GuIrit_POLY = function( IsPolyline, VrtxList, TrianglesOnly ):
+    return = poly( VrtxList, IsPolyline ):
+    if ( TrianglesOnly == true, 
+        return = triangl(return, false ) ):
+    GUpdateParams( Return, "IRT_MDLR_PRIM_POLY", list( IsPolyline, VrtxList,
+						       TrianglesOnly ) );
+
+GuIrit_SPHERE = function( Center, Radius, PolyResolution, TrianglesOnly ):
+    resolution = PolyResolution:
+    return = sphere( Center, Radius ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false ) ):   
+    GUpdateParams( Return, "IRT_MDLR_PRIM_SPHERE", list( Center, Radius, 
+							 PolyResolution, 
+							 TrianglesOnly ) );
+
+GuIrit_CYLIN = function( Center, Direction, Radius, BottomBase, TopBase,
+			    PolyResolution, TrianglesOnly ):Caps:
+    resolution = PolyResolution:
+    if ( BottomBase == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    if ( TopBase == true, 
+        Caps = Caps + 2 ): 
+    return = cylin( Center, Direction, Radius, Caps ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false ) ):  
+    GUpdateParams( Return, "IRT_MDLR_PRIM_CYLINDER", list(Center, Direction, 
+							  Radius, BottomBase, 
+							  TopBase, 
+							  PolyResolution, 
+							  TrianglesOnly ) );
+   
+GuIrit_CONE = function( Center, Direction, Radius, Base, PolyResolution, 
+			TrianglesOnly ):Caps:
+    resolution = PolyResolution:
+    if ( Base == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    return = cone( Center, Direction, Radius, Caps ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false )): 
+    GUpdateParams( Return, "IRT_MDLR_PRIM_CONE", list( Center, Direction, 
+						       Radius, Base, 
+						       PolyResolution, 
+						       TrianglesOnly ) );
+
+GuIrit_TCONE = function( Center, Direction, Radius1, Radius2, BottomBase,  
+			 TopBase, PolyResolution, TrianglesOnly ):Caps:
+    resolution = PolyResolution:
+    if ( BottomBase == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    if ( TopBase == true, 
+        Caps = Caps + 2 ): 
+    return = con2( Center, Direction, Radius1, Radius2, Caps ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false ) ): 
+    GUpdateParams( Return, "IRT_MDLR_PRIM_CON2", list( Center, Direction, 
+						       Radius1, Radius2, 
+						       BottomBase, TopBase, 
+						       PolyResolution, 
+						       TrianglesOnly ) );
+
+GuIrit_TORUS = function( Center, Normal, MajorRadius, MinorRadius, 
+			 PolyResolution, TrianglesOnly ):
+    resolution = PolyResolution:
+    return = torus( Center, Normal, MajorRadius, MinorRadius ):
+    if ( TrianglesOnly == true, 
+        return = triangl( return, false ) ):   
+    GUpdateParams( Return, "IRT_MDLR_PRIM_TORUS", list( Center, Normal, 
+							MajorRadius, 
+							MinorRadius, 
+							PolyResolution, 
+							TrianglesOnly ) );
+
+GuIrit_BUNION = function( Obj1, Obj2 ):
+    return = Obj1 + Obj2:
+    GUpdateParams( Return, "IRT_MDLR_BOOL_OR", list( Obj1, Obj2 ) );
+
+GuIrit_BINTER = function( Obj1, Obj2 ):
+    return = Obj1 * Obj2:
+    GUpdateParams( Return, "IRT_MDLR_BOOL_AND", list( Obj1, Obj2 ) );
+ 
+GuIrit_BSUBTR = function( Obj1, Obj2 ):
+    return = Obj1 - Obj2:          
+    GUpdateParams( Return, "IRT_MDLR_BOOL_SUB", list( Obj1, Obj2 ) );
+
+GuIrit_BNEG = function( Obj1 ):
+    return = -Obj1: 
+    GUpdateParams( Return, "IRT_MDLR_BOOL_NEG", list( Obj1 ) );
+
+GuIrit_BCUT = function( Obj1, Obj2 ):
+    return = Obj1 / Obj2: 
+    GUpdateParams( Return, "IRT_MDLR_BOOL_CUT", list( Obj1, Obj2 ) );
+
+GuIrit_BMERGE = function( Obj1, Obj2 ):
+    return = Obj1 ^ Obj2: 
+    GUpdateParams( Return, "IRT_MDLR_BOOL_MERGE", list( Obj1, Obj2 ) );
+
+GuIrit_BINTERCRV = function( Obj1, Obj2 ): ICrv:
+    ICrv = iritstate( "intercrv", true ):
+    return = Obj1 * Obj2: 
+    ICrv = iritstate( "intercrv", ICrv ):     
+    GUpdateParams( Return, "IRT_MDLR_BOOL_INTER_CRV", list( Obj1, Obj2 ) );
+
+#
+#GEOMETRY Tab functions
+#
+
+GuIrit_AgrgtOnGrid = function( Obj, Dx, Dy, Dz, XTimes, YTimes, ZTimes ):
+    GuIritScreamError("AgrgtOnGrid: Script function is not supported!"):
+    return = nil();
+
+GuIrit_AgrgtOnCrv = function( Obj, Crv, Times, Orientation ):
+    GuIritScreamError("AgrgtOnCrv: Script function is not supported!"):
+    return = nil();
+
+GuIrit_AgrgtOnSrf = function( Srf, TileObjExpr, TileTol, UTimes, VTimes, ZBase, 
+							  ZSize, UVTiles, Rand ):			
+    GuIritScreamError("AgrgtOnSrf: Script function is not supported!"):
+    return = nil();
+
+GuIrit_AgrgtOnVol = function( Vol, Tile, TilingType, UTimes, VTimes, WTimes,
+			      FitObj, Precise, BoundaryShelling,
+			      BoundaryCapping, WallThick, LowOrder,
+			      MaxEdgeLength ):
+    GuIritScreamError("AgrgtOnVol: Script function is not supported!"):
+    return = nil();
+
+GuIrit_MESHPROCESS = function( PolyObj, Quads, Triangles, Planarity, 
+								Orientation, Normals, MeshMaxEdgeLen ):			
+    GuIritScreamError("MESHPROCESS: Script function is not supported!"):
+    return = nil();
+	
+#GuIrit_OMerge = function( MergeFolder, ListObjs, Individualobjs, OneEntity,			
+#			  SrfU, Cnvrt2Tris ): i: 
+#    if ( MergeFolder == false && ListObjs == false,
+#	return = nth( Individualobjs, 1 ):
+#	for ( i = 2, 1, sizeof( Individualobjs ),
+#	    return = return + nth( Individualobjs, i )):
+#	GUpdateParams( Return, "IRT_MDLR_OBJS_MERGE", list( MergeFolder, 
+#							    ListObjs, 
+#							    Individualobjs, 
+#							    OneEntity,
+#							    SrfU, 
+#							    Cnvrt2Tris ) ),
+#	GuIritScreamError("Merge: Script function is not supported!"));
+  
+GuIrit_OMerge = function( MergeFolder, ListObjs, Individualobjs, OneEntity,
+			  SrfU, Cnvrt2Tris ): i: Merge: Dir: T1:
+    Merge = true:
+    if ( MergeFolder == false && ListObjs == false,
+	return = nth( Individualobjs, 1 ):
+	if ( thisobj( "return" ) == curve_type || 
+	     thisobj( "return" ) == CTLPT_TYPE ,
+	    for ( i = 2, 1, sizeof( Individualobjs ),
+		T1 = nth( Individualobjs, i ):
+		if ( thisobj( "T1" ) != curve_type &&
+		     thisobj( "T1" ) != CTLPT_TYPE,
+		     Merge = false ) ):
+	    if ( Merge == true,
+		for ( i = 2, 1, sizeof( Individualobjs ),
+		    return = return + nth( Individualobjs, i ) ):
+		GUpdateParams( Return, "IRT_MDLR_OBJS_MERGE",
+			       list( MergeFolder, ListObjs, Individualobjs, 
+				     OneEntity, SrfU, Cnvrt2Tris ) ),
+		GuIritScreamError("Merge: objects are not homogeneous!") ),
+	    if ( thisobj( "return" ) == surface_type,
+		for ( i = 2, 1, sizeof( Individualobjs ),
+		    T1 = nth( Individualobjs, i ):
+		    if ( thisobj( "T1" ) != surface_type,
+			Merge = false ) ):	     
+		if ( Merge == true,
+		    if (SrfU == true,
+		        Dir = COL,
+		        Dir = ROW):
+		    for ( i = 2, 1, sizeof( Individualobjs ),
+		        return = smerge( return, nth( Individualobjs, i ),
+					 Dir, false ) ):
+		    GUpdateParams( Return, "IRT_MDLR_OBJS_MERGE",
+				   list( MergeFolder, ListObjs, Individualobjs,
+					 OneEntity, SrfU, Cnvrt2Tris ) ),
+		    GuIritScreamError("Merge: objects are not homogeneous!") ),
+		 GuIritScreamError("Merge: Script function is not supported!") ) ) ,
+	GuIritScreamError("Merge: Script function is not supported!") ); 
+
+GuIrit_ODuplicate = function( Obj, Delta ):
+    GuIritScreamError("Duplicate: Script function is not supported!"):
+    return = nil();
+
+GuIrit_OMirror = function( Obj, Normal, OffsetDist ):
+    GuIritScreamError("Mirror: Script function is not supported!"):
+    return = nil();
+
+GuIrit_ONegate = function( Obj, Dir1, Dir2 ):
+    GuIritScreamError("Negate: Script function is not supported!"):
+    return = nil();	
+	  
+GuIrit_OSplit = function( Obj ):
+    GuIritScreamError("Split: Script function is not supported!"):
+    return = nil();
+
+GuIrit_Deform = function( Obj, LeverScale, DeformMaxEdgeLen, SmoothNrmls ):
+    GuIritScreamError("Deform: Script function is not supported!"):
+    return = nil();
+
+GuIrit_Depth = function( Width, Height, CameraOptions, MultipleRenders, 
+			 HistogramOptions, ZHistogramFileName, ZbufferFileName,
+			 RGBImageFileName ):
+    GuIritScreamError("DepthExaminer: Script function is not supported!"):
+    return = nil();
+ 
+GuIrit_IImageMovie = function( MovieExpr, ObjExpr, ImgScale, Translate, 
+							   PreserveAspectRatio, NewPicEveryTime ):
+    GuIritScreamError("IImageMovie: Script function is not supported!"):
+    return = nil();
+ 
+GuIrit_OCnvrt = function( Obj, NewType ):
+    return = COERCE( Obj, NewType ):
+    GUpdateParams( Return, "IRT_MDLR_OBJ_CONVERT", list( Obj, NewType ) );
+
+GuIrit_SlctvHigh = function( Obj, HighlightCond, AttrName, AttrValue, 
+							 HighlightMethod, HighlightValue ):
+	GuIritScreamError("SlctvHigh: Script function is not supported!"):
+    return = nil();
+	
+GuIrit_Distance = function( ArrowCtlPts, Params, Precision, HeadLen, 
+							OrthoDragging ):
+    GuIritScreamError("Distance: Script function is not supported!"):
+    return = nil();
+	
+GuIrit_SubdivSrf = function(PolyObj, Scheme, Iterations, ButterflyWCoef, 
+			    SmoothNormals, TrianglesOnly ):
+    return = PSUBDIV( PolyObj, Scheme, Iterations, SmoothNormals, 
+		      TrianglesOnly, ButterflyWCoef ):
+    GUpdateParams( Return, "IRT_MDLR_SUBDIV_SRFS", list( PolyObj, Scheme, 
+							 Iterations, 
+							 ButterflyWCoef, 
+							 SmoothNormals, 
+							 TrianglesOnly ) );
+
+GuIrit_IText = function( Text, FileName, OverlayThreeDObj, FontName,
+			#Not the same
+			 FontStyle, FontSize, Spacing, Alignment, Output, 
+			 ThreeDEdge, ThreeDOptions, Tolerance, PolyPts ):
+    if( OverlayThreeDObj == false, 
+	return = TEXT2GEOM( Text, FontName, FontStyle, coord( Spacing, 0 ), 
+			    ThreeDEdge, 
+			    list( coord( ThreeDOptions, 0 ), 
+				  coord( ThreeDOptions, 1 ),
+				  coord( ThreeDOptions, 2 ) ) , Tolerance, Output ),
+	return = TEXTLAYSHP( Text, FontName, FontStyle, FontSize, Spacing, 
+			     Tolerance, ThreeDEdge, 
+			     list( coord( ThreeDOptions, 0 ), 
+				   coord( ThreeDOptions, 1 ),
+				   coord( ThreeDOptions, 2 ) ), Alignment, 
+		    	     Output, OverlayThreeDObj ) ):		    
+	GUpdateParams( Return, "IRT_MDLR_IMPORT_TEXT", list( Text, FileName,
+							     OverlayThreeDObj, 
+							     FontName, 
+							     FontStyle, 
+							     FontSize, 
+							     Spacing, 
+							     Alignment, 
+							     Output, 
+							     ThreeDEdge, 
+							     ThreeDOptions, 
+							     Tolerance, 
+							     PolyPts ) );
+
+GuIrit_MCFILE = function( FileName, CellType, CellSize, Width, Height, 
+			  MCDepth, SkipFactor, IsoLevel ): p:
+    p = coerce( CellSize, point_type ):
+    return = mrchcube( list(FileName, CellType, Width, Height, MCDepth), p, 
+		       SkipFactor, IsoLevel ):				    
+    GUpdateParams( Return, "IRT_MDLR_MC_FILE", list( FileName, CellType, 
+						     CellSize, Width, Height,
+						     MCDepth, SkipFactor, 
+						     IsoLevel ) );
+
+GuIrit_MCTRIVAR = function( Trivar, Axis, Size, SkipFactor, ResamplingFactor, 
+			    IsoLevel ): p:			
+    p = coerce( Size, point_type ):
+    return = mrchcube( list( Trivar, Axis, ResamplingFactor, off ), p,
+		       SkipFactor, IsoLevel ):
+    GUpdateParams( Return, "IRT_MDLR_MC_TRIVAR", list( Trivar, Axis, Size, 
+						       SkipFactor, 
+						       ResamplingFactor, 
+						       IsoLevel ) );
+
+GuIrit_MCIMPLCT = function( Implicit, CellSize, MinDomain, MaxDomain, Width, 
+			    Height, MCDepth ):
+    GuIritScreamError("MCIMPLCT: Script function is not supported!"):
+    return = nil();
+
+GuIrit_Length = function( Obj ):
+    return = CPOLY( Obj ):
+    GUpdateParams( Return, "IRT_MDLR_QUERY_LENGTH", list( Obj ) );
+
+GuIrit_Area = function( Obj ):
+    return = AREA( Obj ):
+    GUpdateParams( Return, "IRT_MDLR_QUERY_AREA", list( Obj ) );
+
+GuIrit_Volume = function( Obj ):
+    return = VOLUME( Obj ):
+    GUpdateParams( Return, "IRT_MDLR_QUERY_VOLUME", list( Obj ) );
+
+GuIrit_BBox = function( Object ):
+    return = BBOX( Object ):
+    GUpdateParams( Return, "IRT_MDLR_QUERY_BBOX", list( Object ) );
+
+GuIrit_IsoSrfCvr = function( Srf, Dir, Tolerance, MinSubdivLevel, FullIso,
+			      SinglPath, SkewIsoDist ):
+    return = SADAPISO( Srf, true, Dir, Tolerance, FullIso, SinglPath, nil() ):
+    GUpdateParams( Return, "IRT_MDLR_ISOCRV_SRF_COVERAGE",
+		   list( Srf, Dir, Tolerance, MinSubdivLevel, 
+			 FullIso, SinglPath ) );
+
+GuIrit_CrvCH = function( CCHComputeCH, Crv, Fineness ):		    
+    if ( CCHComputeCH == true, 
+	return = CNVXHULL( Crv, Fineness ),
+	return = CRV2TANS( Crv, Fineness ) ):
+	# CCHComputeCH == false - Need test to Check (IRT_MDLR_CRV_CNVX_HULL)
+    GUpdateParams( Return, "IRT_MDLR_CRV_CNVX_HULL", list( CCHComputeCH, Crv,
+							   Fineness ) );
+
+GuIrit_AntipodalPts = function( CrvSrf1, CrvSrf2, Contact, Euclid, DrawLines ):		
+    GuIritScreamError("AntipodalPts: Script function is not supported!"):
+    return = nil();
+
+GuIrit_FFDuality = function( CrvSrf ):
+    return = DUALITY( CrvSrf ):
+    GUpdateParams( Return, "IRT_MDLR_FF_DUALITY", list( CrvSrf ) );
+
+GuIrit_POLYFORM = function( PolyDimension, ExprDim1, ExprDim2, ExprDim3,
+							ExprDim4, ExprDim5, ExprDim6 ):
+    GuIritScreamError("POLYFORM: Script function is not supported!"):
+    return = nil();
+	
+GuIrit_RayTraps = function( CrvsList, SubdivTol, NumericTol, Orient, PlotPaths ):		#PlotPaths?  different results - result of guirit is different from script result (IRT_MDLR_RAY_TRAPS)
+    return = RAYTRAPS( CrvsList, Orient, SubdivTol, NumericTol, true ):
+    GUpdateParams( Return, "IRT_MDLR_RAY_TRAPS", list( CrvsList, SubdivTol, 
+						       NumericTol, Orient,
+						       PlotPaths ) );
+
+GuIrit_PWRuledApx = function( Srf, Tolerance, Dir ):
+    return = PRISA( Srf, 100, -Tolerance, Dir, vector(0, 1, 0), false ): 
+    GUpdateParams( Return, "IRT_MDLR_PIECEWISE_RULEDSRF",
+		   list( Srf, Tolerance, Dir ) );
+
+GuIrit_Prisa = function( Srf, Sampling, Tolerance, Dir, Spacing ):
+    return = PRISA( Srf, Sampling, Tolerance, Dir, Spacing, false ):
+    GUpdateParams( Return, "IRT_MDLR_LAYOUT_PRISA", list( Srf, Sampling, 
+							  Tolerance, Dir, 
+							  Spacing ) );
+
+GuIrit_StewartPlatform = function( Tolerances, BtmBasePt1, BtmBasePt2,
+								   BtmBasePt3, TopBaseLengths, RodLens123, 
+								   RodLens456, NumSols ):
+    GuIritScreamError("StewartPlatform: Script function is not supported!"):
+    return = nil();							  
+						  
+#GuIrit_Kinematics = function( PtsList, PointCoords, PointConstraintStr,
+#			      CenterPoint, PointOnCurveExpr, PointOnSurfaceExpr, 
+#				  PointAttachObjExpr, BarsList, BarPoint1, BarPoint2, 
+#				  BarAttachObjExpr, ConstraintsList, ConstraintStr,
+#				  Element1, Element2, CrvSrf, Value, DomainMin, DomainMax,
+#				  Tolerances, IdxCrntSolPoly, IdxCrntSolPt, 
+#			      CyclicStateStr, SolutionCrvTraces):
+#    GuIritScreamError("Kinematics: Script function is not supported!"):
+#    return = nil();
+
+GuIrit_TwoContacts = function( MovingCrvExpr, ObstaclesList, Tolerances,
+							   Translation, Animate ):
+    GuIritScreamError("TwoContacts: Script function is not supported!"):
+    return = nil();	
+ 	
+GuIrit_Pk3CircTri = function( Point1, Point2, Point3, TriInteriorSolOnly, 
+			      SubdivTolerance, NumericTolerance ):
+    return = PKTRI3CRCS( Point1, Point2, Point3, TriInteriorSolOnly, 
+			 SubdivTolerance, NumericTolerance ):
+    GUpdateParams( Return, "IRT_MDLR_PACK_3CIRC_IN_TRI",
+		   list( Point1, Point2, Point3, TriInteriorSolOnly,
+		         SubdivTolerance, NumericTolerance ) );
+
+GuIrit_Pk6CircTri = function( Point1, Point2, Point3, SubdivTolerance, 
+			      NumericTolerance ):
+    return = PKTRI6CRCS( Point1, Point2, Point3, false, SubdivTolerance, 
+			 NumericTolerance ):
+    GUpdateParams( Return, "IRT_MDLR_PACK_6CIRC_IN_TRI",
+		   list( Point1, Point2, Point3, SubdivTolerance, 
+		         NumericTolerance ) );
+
+GuIrit_CyclicPath = function( Crv, PathLength, SubdivTolerance,
+				#Need test to Check (IRT_MDLR_CTRL_CYCLIC_PATH)
+			      PathNumericTolerance, PathSolNumber ):
+    return = CTRLCYCLE( Crv, PathLength, SubdivTolerance,
+			PathNumericTolerance ):	
+    return = nth( return, PathSolNumber ):	      
+    GUpdateParams( Return, "IRT_MDLR_CTRL_CYCLIC_PATH",
+		   list( Crv, PathLength, SubdivTolerance, 
+		         PathNumericTolerance, PathSolNumber ) );
+
+GuIrit_Obj3dImg = function( Img1Name, Img2Name, Img3Name, ColorMethod, 
+			    BlobShape, OtherBlob, BlobsSpread, DoTexture,
+			    Resolution, Negate, Intensity, MinIntensity ): 
+			    SpreadMethod:
+
+    SpreadMethod = BlobsSpread:
+    if ( BlobShape == 0, 
+	OtherBlob = box( vector( -0.5, -0.5, -0.5 ), 1.0, 1.0, 1.0 ),
+	if ( BlobShape == 1,
+	    OtherBlob = sphere( vector( 0.0, 0.0, 0.0 ), 0.5 ) ) ):    
+    if ( BlobsSpread == 2,
+	SpreadMethod = 3,
+	if( BlobsSpread == 3,
+	    SpreadMethod = 6,
+	    if( BlobsSpread == 4,
+		SpreadMethod = 7 ) ) ):
+    SpreadMethod = SpreadMethod + 1:
+    ColorMethod = ColorMethod + 1:
+    if ( BlobShape == 3,
+	return = MFROM3IMG( Img1Name, Img2Name, Img3Name, DoTexture, OtherBlob,
+			    SpreadMethod, ColorMethod, Resolution, Negate, 
+			    Intensity, MinIntensity, true ),
+	return = MFROM2IMG( Img1Name, Img2Name, DoTexture, OtherBlob,
+			    SpreadMethod, ColorMethod, Resolution, Negate, 
+			    Intensity, MinIntensity, true ) ):
+    GUpdateParams( Return, "IRT_MDLR_3DSTATUE_IMAGES", list( Img1Name,
+							     Img2Name, 
+							     Img3Name, 
+							     ColorMethod,
+							     BlobShape, 
+							     OtherBlob, 
+							     BlobsSpread, 
+							     DoTexture,
+							     Resolution, 
+							     Negate, 
+							     Intensity, 
+							     MinIntensity  ) );
+
+GuIrit_Pxl3dImg = function( Img1Name, Img2Name, Img3Name, DitherSize,
+			    MatchWidth, Negate, Contrast, Spread ): BBoxObj: 
+			    ScaleFactor:
+    Spread = Spread + 1:
+    if ( SIZEOF(Img3Name) > 0,
+	return = BFROM3IMG( Img1Name, Img2Name, Img3Name, DitherSize, 
+			    MatchWidth, Negate, Contrast, Spread, 0.0 ),
+			    
+	return = BFROM2IMG( Img1Name, Img2Name, DitherSize, MatchWidth, 
+			    Negate, Contrast, Spread, 0.0 ) ):
+    BBoxObj = BBOX( return ):
+    ScaleFactor = max( nth( BBoxObj, 2 ) - nth( BBoxObj, 1 ), 
+		      max( nth( BBoxObj, 4 ) - nth( BBoxObj, 3 ), 
+		           nth( BBoxObj, 6 ) - nth( BBoxObj, 5 ) ) ):
+    return = return * sc( 1 / ScaleFactor ):
+    GUpdateParams( Return, "IRT_MDLR_3DPIXELS_IMAGES", list( Img1Name, 
+							     Img2Name, 
+							     Img3Name, 
+							     DitherSize,
+							     MatchWidth, 
+							     Negate, 
+							     Contrast, 
+							     Spread) );
+
+GuIrit_OrthoLetters = function( OutputType, JointsOptions, FontText1, FontName1, 
+								LettersStyle1, FirstStrSpacing, FontText2, 
+								FontName2, LettersStyle2, SecondStrSpacing, 
+								Tolerances, ZScaling, MatchingList ):
+    GuIritScreamError("OrthoLetters: Script function is not supported!"):
+    return = nil();
+								 
+GuIrit_BeltCrv = function( CrvPts, Thickness, BoundingArcs ): circs:
+    GuIritScreamError("BeltCrv: Script function is not supported!"):
+    return = nil();
+    #Failed to create an arc.
+    #circs = POLY( CrvPts, true ):
+    #return = BELTCURVE( circs, Thickness, BoundingArcs, true );			    #mismatch parameter 1 -  expected "Poly", found "List Object".	(IRT_MDLR_BELT_CURVE)
+
+GuIrit_VTSImport = function( FileName, UasZ, UasColor ):
+    GuIritScreamError("VTSImport: Script function is not supported!"):
+    return = nil();
+
+GuIrit_Crvs2RRgns = function( CurveSrfStyle, CurveObjType, Curves, Obj, Size,
+			      NumSmoothingSteps, OutputStyle, ReverseRuledSurf,
+			      AngularDeviation, MaxDistCorners ):
+    GuIritScreamError("Crvs2RRgns: Script function is not supported!"):
+    return = nil();
+#    return = C2RECTRGN( Curves, AngularDeviation, OutputStyle, Size, 
+#			NumSmoothingSteps );
+
+GuIrit_BiCrvPtCrv = function( Crv, CrvPt ):
+    CrvPt = coerce( CrvPt, point_type ):
+    return = CBISECTOR2D( list( Crv, CrvPt ), false, 0, 0, false, false ):
+    GUpdateParams( Return, "IRT_MDLR_BISECTOR_CRV_CRV_PT", list( Crv, CrvPt ) );
+ 
+GuIrit_BiCrvCrvs = function( Crv1, Crv2, TwoDMethod, Tolerance, SameNormal,
+		     # Numeric Tracing is not supported\\n
+		             StepSize, SubdivTol, NumericTol, BBoxMin, BBoxMax ):
+    if ( TwoDMethod == 3,
+	GuIritScreamError("BiCrvCrvs:  Numeric Tracing is not supported\\n"): 
+	return = nil(),
+	return = CBISECTOR2D( list( Crv1, Crv2 ), true, TwoDMethod + 1, 
+			      Tolerance, true, SameNormal ): 
+	GUpdateParams( Return, "IRT_MDLR_BISECTOR_CRV_2DCRVS",
+		       list( Crv1, Crv2, TwoDMethod, Tolerance, SameNormal,
+			     StepSize, SubdivTol, NumericTol, BBoxMin,
+			     BBoxMax) ) );
+
+GuIrit_BiSrfCrvs = function( Crv1, Crv2 ):
+    return = CBISECTOR3D( list( Crv1, Crv2 ), 0 ):
+    GUpdateParams( Return, "IRT_MDLR_BISECTOR_SRF_3DCRVS", list( Crv1, Crv2) );
+
+GuIrit_BiSrfPtSrf = function( Srf, SrfPt ):
+    return = SBISECTOR( Srf, SrfPt ):
+    GUpdateParams( Return, "IRT_MDLR_BISECTOR_SRF_SRF_PT",
+	           list( Srf, SrfPt ) );
+
+GuIrit_BiCnCylPln = function( Pt, Dir, Angle, Rad, DrawPrim ): Len:
+    Len = sqrt( Sqr( coord( Dir, 0 ) ) + Sqr( coord( Dir, 1 ) ) + 
+		Sqr( coord( Dir, 2 ) ) ):
+    if( Angle == 0.0,
+	return = BSCTCYLPL( Pt, Dir, Rad, Len ),
+	return = BSCTCONPL( Pt, Dir, Angle, Len ) ):
+    GUpdateParams( Return, "IRT_MDLR_BISECTOR_CONECYLIN_PLANE",
+		   list( Pt, Dir, Angle, Rad, DrawPrim ) );
+	
+GuIrit_BiCnCylSpr = function( Pt, Dir, Angle, CylnRad, SprCenter, SprRad, 
+			      DrawPrim ): Len: p:	    
+ p = coerce( SprCenter, point_type ):
+ Len = sqrt( Sqr( coord( Dir, 0 ) ) + Sqr( coord( Dir, 1 ) ) + 
+	     Sqr( coord( Dir, 2 ) ) ):
+     if( Angle == 0.0,
+	return = BSCTCYLSPR( Pt, Dir, CylnRad, p, SprRad, Len ),
+	return = BSCTCONSPR( Pt, Dir, Angle, p, SprRad, Len ) ):
+ GUpdateParams( Return, "IRT_MDLR_BISECTOR_CONECYLIN_SPHERE",
+		list( Pt, Dir, Angle, CylnRad, SprCenter, SprRad, DrawPrim ) );
+
+GuIrit_BiTrsSpr  = function( TrsPt, TrsDir, TrsRMajor, TrsRMinor, SprCntr, 
+			     SprRad, DrawPrim ): p:	
+    p = coerce( SprCntr, point_type ):
+    return = BSCTTRSSPR( TrsPt, TrsDir, TrsRMajor, TrsRMinor, p, SprRad ):
+    GUpdateParams( Return, "IRT_MDLR_BISECTOR_TORUS_SPHERE",
+		   list( TrsPt, TrsDir, TrsRMajor, TrsRMinor, SprCntr, 
+			 SprRad, DrawPrim ) );
+
+#GuIrit_Coverage = function( OnlyCreateUVMaps, InputDirName, OutputDirName,				    # Too many parameters - maximum 20
+#			     Targets, Occluders, Sensors, ProblemType, 
+#			     AlgorithmType, MinCardinality, MaxCardinality,
+#			     MaxNrOfStoredSolutions, ApproximationFactor, 
+#			     CoverageValueUpperBoundFactor, CoverageValueLowerBoundFactor, 
+#			     UVMapScalingFactor, ImageDimension, NeighborhoodRadius, 
+#			     AdaptiveTriangulation, FineNess, RoundWeights, 
+#			     NrOfUsedExactWeights, CompressVectors, 
+#			     SortWeights, NrOfIterations ):
+#   GuIritScreamError("Coverage: Script function is not supported\\n"); 
+
+GuIrit_DisplaySolution  = function( VisualizationType, UpperBoundFactor,
+				    UpperEnvelopeThresholdFactor, 
+				    LowerEnvelopeThresholdFactor,
+				    LowerBoundFactor, BestSolutionCategory,
+				    SelectedSensors, SingleSensors,
+				    NrOfBestSensorsToDisplay ):
+    GuIritScreamError("DisplaySolution: Script function is not supported\\n"):
+    return = nil();
+
+#
+#CURVES Tab functions
+#
+GuIrit_CIRCCRRD = function( Center, Radius, RationalApprox):
+    if ( RationalApprox == true, 
+        return = circle( Center , Radius ),
+        return = pcircle( Center , Radius ) ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_CNTR_RAD_CIRCLE",
+		   list( Center, Radius, RationalApprox ) );
+
+GuIrit_CIRCDIAM = function(DiameterFirstPoint, DiameterSecondPoint, 
+			   RationalApprox): Center: Radius:
+    Center = midPoint( DiameterFirstPoint, DiameterSecondPoint ):
+    Radius = dstPtPt ( DiameterFirstPoint, DiameterSecondPoint )  * 0.5:
+    return = GuIrit_CircCrRd(Center, Radius, RationalApprox):
+    GUpdateParams( Return, "IRT_MDLR_CRV_2PTS_DIAM_CIRCLE", 
+		   list( DiameterFirstPoint, DiameterSecondPoint, 
+			 RationalApprox ) );
+
+GuIrit_CIRC3PT = function( Pt1, Pt2, Pt3, RationalApprox ): Center: Radius:
+    GuIritScreamError("CIRC3PT: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_CIRCLSTSQR = function( RationalApprox, CtlPtList) : Center: Radius:
+    GuIritScreamError("CIRCLSTSQR: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_CIRC2PTRD = function( RadiusFirstPoint, RadiusSecondPoint, Radius,
+			     RationalApprox ): Center: Dest: MiddlePoint:
+    MiddlePoint = midPoint( RadiusFirstPoint, RadiusSecondPoint ):
+    Dest = dstPtPt( RadiusFirstPoint, RadiusSecondPoint ):
+    if ( Radius > 0,
+	Center = 
+	vector( coord( MiddlePoint, 0 ) - sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( RadiusFirstPoint, 1 ) - coord( RadiusSecondPoint, 1 )) / Dest,
+		coord( MiddlePoint, 1 ) - sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( RadiusSecondPoint, 0 ) - coord( RadiusFirstPoint, 0 )) / Dest,
+		coord( RadiusFirstPoint, 2 )),
+	Center = 
+	vector( coord( MiddlePoint, 0 ) + sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( RadiusFirstPoint, 1 ) - coord( RadiusSecondPoint, 1 )) / Dest,
+	        coord( MiddlePoint, 1 ) + sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( RadiusSecondPoint, 0 ) - coord( RadiusFirstPoint, 0 )) / Dest,
+	        coord( RadiusFirstPoint, 2 ))):
+    return = GuIrit_CircCrRd( Center, Radius, RationalApprox ):       
+    GUpdateParams( Return, "IRT_MDLR_CRV_2PTS_RAD_CIRCLE", 
+		   list( RadiusFirstPoint, RadiusSecondPoint, Radius, 
+			 RationalApprox ) );
+
+GuIrit_CIRCT2CRD = function( Crv1, Crv2, Radius, RationalApprox, Tolerance ):
+    # missing script function (IRT_MDLR_CRV_2TAN_CRVS_RAD_CIRCLE)
+    GuIritScreamError("CIRCT2CRD: Script function is not supported\\n"):
+    return = nil();
+#	return = CRC2CRVTAN( Crv1, Crv2, Radius, Tolerance) ; 	
+
+GuIrit_CIRCT3C = function( Crv1, Crv2, Crv3, RationalApprox ):
+    GuIritScreamError("CIRCT3C: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_ARC2PTSCNTR = function( StartPoint, EndPoint, Center, ClkWise ):	
+			Radius: StartAngle: EndAngle:		  
+    Radius = dstPtPt( StartPoint, Center ):
+    EndAngle = atan2( coord( EndPoint, 1 ) - coord( Center, 1 ),
+		      coord( EndPoint, 0 ) - coord( Center, 0 ) ) * 57.2957795130823208768:
+    StartAngle = atan2( coord( StartPoint, 1 ) - coord( Center, 1 ),
+		        coord( StartPoint, 0 ) - coord( Center, 0 ) ) * 57.2957795130823208768:
+    if (EndAngle <= StartAngle,
+	EndAngle = EndAngle + 360.0 ):
+    if ( EndAngle - StartAngle < 160.0,
+	return = Arc( StartPoint, Center, EndPoint ),
+	return = Arc360( Center, Radius, StartAngle, EndAngle ) ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_START_END_CNTR_ARC",
+		   list( StartPoint, EndPoint, Center, ClkWise ) );
+   
+GuIrit_ARC2PTSRD = function( StartPoint, EndPoint, Radius, ClkWise ): 
+	    MiddlePoint: Center: StartAngle: EndAngle: Dest:
+    Dest = dstPtPt( StartPoint, EndPoint ):
+    MiddlePoint = midPoint( StartPoint, EndPoint ):
+    if ( Radius > 0,
+	Center = 
+	vector( coord( MiddlePoint, 0 ) - sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( StartPoint, 1 ) - coord( EndPoint, 1 )) / Dest,
+		coord( MiddlePoint, 1 ) - sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( EndPoint, 0 ) - coord( StartPoint, 0 )) / Dest,
+		coord( StartPoint, 2 )),
+	Center = 
+	vector( coord( MiddlePoint, 0 ) + sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( StartPoint, 1 ) - coord( EndPoint, 1 )) / Dest,
+	        coord( MiddlePoint, 1 ) + sqrt( sqr( Radius ) - sqr( Dest / 2) ) * ( coord( EndPoint, 0 ) - coord( StartPoint, 0 )) / Dest,
+	        coord( StartPoint, 2 ))):
+    EndAngle = atan2( coord( EndPoint, 1 ) - coord( Center, 1 ),
+		        coord( EndPoint, 0 ) - coord( Center, 0 ) ) * 57.2957795130823208768:
+    StartAngle = atan2( coord( StartPoint, 1 ) - coord( Center, 1 ),
+		        coord( StartPoint, 0 ) - coord( Center, 0 ) ) * 57.2957795130823208768:
+    if (EndAngle <= StartAngle,
+	EndAngle = EndAngle + 360.0 ):
+    if ( EndAngle - StartAngle < 160.0,
+	return = Arc( StartPoint, Center, EndPoint ),
+	return = Arc360( Center, Radius, StartAngle, EndAngle ) ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_START_END_RAD_ARC", list( StartPoint, 
+								   EndPoint, 
+								   Radius, 
+								   ClkWise ) );
+
+GuIrit_ARC3PTS = function( StartPoint, EndPoint, PointOnArc ):
+    GuIritScreamError("ARC3PTS: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_ARC2TANRD = function( Crv1, Crv2, Radius, RationalApprox, Tolerance ):
+    GuIritScreamError("ARC2TANRD: Script function is not supported\\n"):
+    return = nil();
+#	return = CRC2CRVTAN( Crv1, Crv2, Radius, Tolerance ); 	
+
+GuIrit_Arc2AngsRd = function( StartAngle, EndAngle, EndRadius, Center ):    
+    return = ARC360( Center, EndRadius, StartAngle, EndAngle ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_2ANG_RAD_ARC", list( StartAngle, 
+							      EndAngle, 
+							      EndRadius, 
+							      Center ) );
+
+GuIrit_ArcBiArcs = function(Crv, Tolerance, MaxAngle ):
+    # GuIrit - xy plane. script - not
+    return = CBIARCS(Crv, Tolerance, MaxAngle ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_PIECEWISE_BIARCS", list( Crv, 
+								  Tolerance, 
+								  MaxAngle ) );
+
+GuIrit_ElpsDiams = function( CenterPoint, MajorRadius, MinorRadius, Rational ):
+    XScale: 
+    if ( Rational == true, 
+	return = circle( vector (0, 0, 0), MinorRadius ),
+	return = pcircle( vector (0, 0, 0), MinorRadius ) ):
+    XScale = MajorRadius / MinorRadius:
+    return = return * sx( XScale ):
+    return = return * trans(CenterPoint):
+    GUpdateParams( Return, "IRT_MDLR_CRV_2DIAM_ELLIPSE", list( CenterPoint, 
+							       MajorRadius, 
+							       MinorRadius, 
+							       Rational ) );
+    
+GuIrit_Elps3Pts = function( Point1, Point2, Point3, Rational ):
+    Point1 = coerce( Point1, point_type ):
+    Point2 = coerce( Point2, point_type ):
+    Point3 = coerce( Point3, point_type ):
+    return = ELLIPSE3PT( Point1, Point2, Point3, 0):
+    return = CONICSEC(return, 0, off, off):  
+    GUpdateParams( Return, "IRT_MDLR_CRV_3PTS_MIN_AREA_ELLIPSE",
+		   list( Point1, Point2, Point3, Rational ) );
+
+GuIrit_Elps4Pts = function( Point1, Point2, Point3, Point4, Rational ):
+    GuIritScreamError("Elps4Pts: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_Conic = function( CoefA, CoefB, CoefC, CoefD, CoefE, CoefF ):
+    return = CONICSEC( list( CoefA, CoefB, CoefC, CoefD, CoefE, CoefF ), 0, 
+		       off, off ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_6COEFS_CONIC", list( CoefA, CoefB, 
+							      CoefC, CoefD,
+							      CoefE, CoefF ) );
+
+GuIrit_CInterp = function( Order, Percent, Periodic, Parametrization, CtlPts, 
+			   EndPtInterp ): Len:
+    Len = SIZEOF(CtlPts) * Percent / 100:
+    if (Len < Order, Len = Order):
+    return = CINTERP( CtlPts, Order, Len, Parametrization, Periodic,
+		      EndPtInterp ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_INTERPOL", list( Order, Percent,
+							  Periodic, 
+							  Parametrization, 
+							  CtlPts, EndPtInterp ) );
+   
+GuIrit_Fnt2Bzr = function( Text, FontName, FontStyle, FontSpaceWidth, 
+			   Text3DEdgeType, Tolerance, Height, ExtStyle,
+			   ExtOffset ): Text3DSetup:
+    Text3DSetup = list( ExtOffset, Height ):
+    return = TEXT2GEOM( Text, FontName, FontStyle, FontSpaceWidth, ExtStyle, 
+			Text3DSetup, Tolerance, Text3DEdgeType ):
+    GUpdateParams( Return, "IRT_MDLR_FONT_TO_BEZIER", list( Text, FontName,
+							    FontStyle, 
+							    FontSpaceWidth, 
+							    Text3DEdgeType, 
+							    Tolerance, 
+							    Height, ExtStyle,
+							    ExtOffset ) );
+    
+GuIrit_CHermite = function( StartPos, EndPos, StartTan, EndTan ):  
+    return = HERMITE( StartPos, EndPos, StartTan, EndTan ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_HERMITE", list( StartPos, EndPos,
+							 StartTan, EndTan ) );
+
+GuIrit_CBezier = function( CtlPts ):
+    return = CBEZIER( CtlPts ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_BEZIER", list( CtlPts ) );
+
+GuIrit_CBSpline = function( CtlPts, Order, EndCond ):
+    if ( EndCond == 1, 
+	return = CBSPLINE( Order, CtlPts, list( KV_OPEN )),
+	if ( EndCond == 0 || EndCond == 2, 
+	    return = CBSPLINE( Order, CtlPts,  list( KV_FLOAT )),
+	    return = CBSPLINE( Order, CtlPts, list( KV_PERIODIC ) ) ) ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_BSPLINE", list( CtlPts, Order, 
+							 EndCond ) );
+
+GuIrit_CrvsArgmnt = function( InputCurves, ShowInputCurves, LoopsOffset,
+			      CornerTypeSelect, CornerRadius, LoopCurves, 
+			      LoopsOnlySelected, Surfaces, SaveLoops, 
+			      SaveSurfaces ):											
+    GuIritScreamError("CrvsArgmnt: Script function is not supported\\n"):
+    return = nil();
+
+GuIrit_CRVPROF = function( CrvList, FilletChamferRadius, FilletChamferSelection,
+						   IntersectParams, CtlPts, CtlPtsAttrs, 
+						   CtlPtsRadius ):											
+    GuIritScreamError("CRVPROF: Script function is not supported\\n"):
+    return = nil();	
+
+GuIrit_PlnrCTiles = function( TilingName, EditType, TilerCurves,
+							  JointsOptions, SkewFactor, NumOfDups, 
+							  BBoxMin, BBoxMax ):											
+    GuIritScreamError("PlnrCTiles: Script function is not supported\\n"):
+    return = nil();	
+
+GuIrit_CMERGE = function( Type1, PObj1, InvertCrv1, FirstPoint, Type2, PObj2,
+						  InvertCrv2, SecondPoint, Merge, ChamferRoundRadius ):											
+    GuIritScreamError("CMERGE: Script function is not supported\\n"):
+    return = nil();	
+	
+GuIrit_CRNDCHMFR = function( CrvExpr, ChamferRound, Radius ):											
+    GuIritScreamError("CRNDCHMFR: Script function is not supported\\n"):
+    return = nil();
+	
+GuIrit_HrmtCrvEdit = function( StartPos, EndPos, StartTan, EndTan ):											
+    GuIritScreamError("HrmtCrvEdit: Script function is not supported\\n"):
+    return = nil();		
+
+GuIrit_CSpiral = function( NumLoops, Pitch, Sampling, CtlPtPerLoop):
+    return = CSPIRAL( NumLoops, Pitch, Sampling, CtlPtPerLoop):
+    GUpdateParams( Return, "IRT_MDLR_CRV_SPIRAL", list( NumLoops, Pitch, 
+							Sampling, 
+							CtlPtPerLoop ) );
+
+GuIrit_CSine = function( NumCycles, Sampling, CtlPtPerLoop):
+    return = CSINE( NumCycles, Sampling, CtlPtPerLoop):
+    GUpdateParams( Return, "IRT_MDLR_CRV_SINE", list( NumCycles, Sampling, 
+						      CtlPtPerLoop ) );
+
+GuIrit_CHelix = function( NumLoops, Radius, Pitch, Sampling, CtlPtPerLoop):
+    return = CHELIX( NumLoops, Pitch, Radius, Sampling, CtlPtPerLoop):
+    GUpdateParams( Return, "IRT_MDLR_CRV_HELIX", list( NumLoops, Radius, Pitch, 
+						       Sampling, 
+						       CtlPtPerLoop ) );
+
+GuIrit_CDomain = function( Crv ):
+    return = PDOMAIN( Crv ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_DOMAIN", list( Crv ) );
+
+GuIrit_CEval = function( Crv, Parameter ): 
+    return = CEVAL( Crv, Parameter ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL", list( Crv, Parameter ) );
+
+GuIrit_CTangent = function( Crv, Parameter, UnitVec ):
+    return = CTANGENT( Crv, Parameter, UnitVec ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_TAN", list( Crv, Parameter, 
+							  UnitVec ) );
+
+GuIrit_CNormal = function( Crv, Parameter, UnitVec ):
+    return = CNORMAL( Crv, Parameter ):
+    if ( UnitVec == false,
+	# CNORMAL normalize the vector any way so UnitVec=false doesn't work
+	GuIritScreamError("CNormal: Vector is always normalized.\\n") ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_NRML", list( Crv, Parameter,
+							   UnitVec ) );
+  
+GuIrit_CBiNormal = function( Crv, Parameter, UnitVec ):	V1: V2:
+    # CNORMAL normalize the vector any way so UnitVec=false doesn't work
+    V1 = CTANGENT( Crv, Parameter, false ): 
+    V2 = CNORMAL( Crv, Parameter ): 
+    return = V2 ^ V1:
+    if( UnitVec == false,
+	 GuIritScreamError("CBiNormal: Vector is always normalized.\\n") ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_BINRML", list( Crv, Parameter, 
+							     UnitVec ) );
+	 
+GuIrit_CCrvtr = function( Crv, Parameter ):
+    return = CCRVTREVAL( Crv, Parameter ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_CRVTR", list( Crv, Parameter ) );
+  
+GuIrit_CCInter = function( Crv1, Crv2, Tolerance, InterEuclidean ):  
+   return = CCINTER( Crv1, Crv2, Tolerance, InterEuclidean ):  
+   GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_INTER", list( Crv1, Crv2, 
+							   Tolerance, 
+							   InterEuclidean ) );
+
+GuIrit_CCBlend = function( Crv1, Crv2, BlendFactor ):
+    FFCOMPAT( Crv1, Crv2):
+    return = CMORPH( Crv1, Crv2, 0.0, BlendFactor ): 
+    GUpdateParams( Return, "IRT_MDLR_CRV_EVAL_BLEND", list( Crv1, Crv2, 
+							    BlendFactor ) );
+
+GuIrit_CEditCtlPt = function( Crv, Index, NewCoords ):
+    return = CEDITPT( Crv, ctlpt( E3, coord( NewCoords, 0 ),
+				      coord( NewCoords, 1 ), 
+				      coord( NewCoords, 2 )), Index ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_EDIT_PT", list( Crv, Index, 
+							 NewCoords ) );
+
+GuIrit_EditCrv = function( Crv, Order, EndCond, DisplayKV, KV, CtlPts ):
+    if ( SizeOf(KV) > 0, 
+	 return = CBSPLINE( Order, CtlPts, KV),
+	 return = CBEZIER( CtlPts ) ):
+	GUpdateParams( Return, "IRT_MDLR_CRV_EDIT_CRV",
+		       list( Crv, Order, EndCond, DisplayKV, KV, CtlPts ) );
+
+GuIrit_MRCrvEdit = function( CrvExpr, CtlPtEdit, Rational, Order, EndCond, 
+							 Support ):											
+    GuIritScreamError("MRCrvEdit: Script function is not supported\\n"):
+    return = nil();	
+	
+GuIrit_CDivide = function( Crv, SubdivParam ): 
+    return = CDIVIDE( Crv, SubdivParam ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_DIVIDE", list( Crv, SubdivParam ) );
+
+GuIrit_CRaise = function( Crv, NewOrder ):
+    return = CRAISE( Crv, NewOrder ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_RAISE", list( Crv, NewOrder ) );
+
+GuIrit_CReparam = function( CrvExpr, StartParam, EndParam ):
+    GuIritScreamError("CReparam: Script function is not supported\\n"):
+    return = nil();		
+	
+GuIrit_CRegion = function( Crv, StartParam, EndParam ):
+    return = CREGION( Crv, StartParam, EndParam ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_REGION", list( Crv, StartParam, 
+							EndParam ) );
+
+GuIrit_CRefine = function( Crv, RefineKnot, RefineAll, RefineAllN ):
+    if ( RefineAll,
+	 GuIritScreamError("Function CRefine not supported for refine all.\\n"):
+         return = nil(),
+         return = CREFINE( Crv, false, list(RefineKnot) ) :
+	 GUpdateParams( Return, "IRT_MDLR_CRV_REFINE", list( Crv, RefineKnot, 
+							     RefineAll, 
+							     RefineAllN ) ) );
+
+GuIrit_CSurface = function( Srf, ParamValue, SrfDir ):
+    return = CSURFACE( Srf, SrfDir, ParamValue ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_FROM_SRF", list( Srf, ParamValue, 
+							  SrfDir ) );
+   
+GuIrit_CMesh = function( Srf, MeshIndex, MeshDir ):
+    return = CMESH( Srf, MeshDir, MeshIndex ):    
+    GUpdateParams( Return, "IRT_MDLR_CRV_FROM_MESH", list( Srf, MeshIndex, 
+							   MeshDir ) );
+   
+GuIrit_COffset = function( Crv, OffsetDistance, Tolerance, XYOffset, 
+			   BezierApprox ):
+    if ( XYOffset == true, crv = COERCE( Crv, E2), crv = COERCE( Crv, E3) ):
+    return = AOFFSET( Crv, OffsetDistance, Tolerance, 0, BezierApprox ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_OFFSET", list( Crv, OffsetDistance, 
+							Tolerance, XYOffset, 
+							BezierApprox ) );
+
+GuIrit_CDerive = function( Crv ):
+    return = CDERIVE( Crv ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_DERIVE", list( Crv ) );
+
+GuIrit_CIntegrt = function( Crv ):
+    return = CINTEG( Crv ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_INTEGRATE", list( Crv ) );
+ 
+GuIrit_CSymbAdd = function( Crv1, Crv2 ):
+    return = SYMBSUM( Crv1, Crv2 ): 
+    GUpdateParams( Return, "IRT_MDLR_CRV_ADD", list( Crv1, Crv2 ) );
+  
+GuIrit_CSymbSub = function( Crv1, Crv2 ):
+    return = SYMBDIFF( Crv1, Crv2 ): 
+    GUpdateParams( Return, "IRT_MDLR_CRV_SUB", list( Crv1, Crv2 ) );
+ 
+GuIrit_CSymbMult = function( Crv1, Crv2 ):
+    return = SYMBPROD( Crv1, Crv2 ):  
+    GUpdateParams( Return, "IRT_MDLR_CRV_MULT", list( Crv1, Crv2 ) );
+
+GuIrit_CSymbDProd = function( Crv1, Crv2 ):
+    return = SYMBDPROD( Crv1, Crv2 ): 
+    GUpdateParams( Return, "IRT_MDLR_CRV_DOT_PROD", list( Crv1, Crv2 ) );
+    
+GuIrit_CSymbCProd = function( Crv1, Crv2 ):
+    return = SYMBCPROD( Crv1, Crv2 ):       
+    GUpdateParams( Return, "IRT_MDLR_CRV_CROSS_PROD", list( Crv1, Crv2 ) );
+  
+GuIrit_CCompose = function( Crv1, Crv2 ):
+    return = COMPOSE( Crv1, Crv2 ):      
+    GUpdateParams( Return, "IRT_MDLR_CRV_CRV_COMPOSE", list( Crv1, Crv2 ) );
+  
+GuIrit_SCompose = function( Srf2, Crv1, Periodic ):
+    if ( Periodic,
+	 GuIritScreamError( "Periodic not supported in SCOMPOSE\\n") ):
+    return = COMPOSE( Crv1, Srf2 ):  
+    GUpdateParams( Return, "IRT_MDLR_CRV_SRF_COMPOSE", list( Srf2, Crv1, 
+							     Periodic ) );
+  
+GuIrit_CCrvtrField = function( Crv ):
+    return = CNRMLCRV( Crv ):
+    GUpdateParams( Return, "IRT_MDLR_CRV_CURVATURE", list( Crv ) );
+   
+#
+#SURFACES Tab functions
+#
+
+GetListOfListsOfMeshPts = function( CtlPts, ULength, VLength ): i: j: Cols:
+    return = nil():
+    for ( j = 1, 1, VLength,
+        Cols = nil():
+        for ( i = 1, 1, ULength,
+	     snoc( nth( CtlPts, i + ULength * (j-1) ), Cols )
+	):
+	snoc( Cols, return )
+    );
+    
+GuIrit_SBezier = function( ULength, VLength, CtlPts ): Mesh:
+    Mesh = GetListOfListsOfMeshPts( CtlPts, ULength, VLength ):
+    return = SBEZIER( Mesh ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_BEZIER", list( ULength, VLength, 
+							CtlPts ) );
+
+GuIrit_SBSpline = function( UOrder, VOrder, ULength, VLength, EndCond, 
+			    CtlPts ): Mesh:		
+    Mesh = GetListOfListsOfMeshPts( CtlPts, ULength, VLength ):
+    if ( EndCond == 1, 
+	return = SBSPLINE( UOrder, VOrder, Mesh, 
+			   list( list( KV_OPEN ), list( KV_OPEN ) ) ),
+	if ( EndCond == 0 || EndCond == 2, 
+	    return = SBSPLINE( UOrder, VOrder, Mesh,  
+			       list( list( KV_FLOAT ), list( KV_FLOAT ) ) ),
+	    return = SBSPLINE( UOrder, VOrder, Mesh, 
+			       list( list( KV_PERIODIC ),
+			       list( KV_PERIODIC ) ) ) ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_BSPLINE", list( UOrder, VOrder, 
+							 ULength, VLength, 
+							 EndCond, CtlPts ) );
+
+GuIrit_SPlane = function( MinX, MinY, MaxX, MaxY, ZLevel, Order, Length):
+    if ( Order != 2 || Length != 2, 
+	GuIritScreamError( "Only linear Bezier plane is support\\n" ),     
+	return = planeSrf( MinX, MinY, MaxX, MaxY) * tz( ZLevel ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_PLANE", list( MinX, MinY, MaxX, MaxY, 
+						       ZLevel, Order, 
+						       Length ) );
+
+GuIrit_SSPhere =  function( Center, Radius, Rational): 
+			save_prim_srfs: save_prim_rat_srfs:
+    if ( Rational == true, 
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", on ),
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", off ) ):
+    save_prim_srfs = iritstate( "PrimType", 1 ):
+    return = sphere( Center, Radius ):
+    save_prim_rat_srfs = iritstate( "PrimRatSrfs", save_prim_rat_srfs ):
+    save_prim_srfs = iritstate( "PrimType", save_prim_srfs ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_SPHERE", list( Center, Radius, 
+							Rational ) );
+
+GuIrit_SCylin = function( Center, Radius, Height, Rational, TopCap, BotCap ): 
+				Caps: save_prim_srfs: save_prim_rat_srfs:
+    if ( Rational == true, 
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", on ),
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", off ) ):
+    save_prim_srfs = iritstate( "PrimType", 1 ):
+    if ( BotCap == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    if ( TopCap == true, 
+        Caps = Caps + 2 ): 
+    return = cylin( Center, vector( 0, 0, Height ), Radius, Caps ):
+    save_prim_rat_srfs = iritstate( "PrimRatSrfs", save_prim_rat_srfs ):
+    save_prim_srfs = iritstate( "PrimType", save_prim_srfs ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_CYLIN", list( Center, Radius, Height, 
+						       Rational, TopCap, 
+						       BotCap ) );
+
+GuIrit_SCone = function( Center, Radius, Height, Rational, Cap ): 
+			    Caps: save_prim_srfs: save_prim_rat_srfs:
+    if ( Rational == true, 
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", on ),
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", off ) ):
+    save_prim_srfs = iritstate( "PrimType", 1 ):
+    if ( Cap == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    return = cone( Center, vector( 0, 0, Height ), Radius, Caps ):
+    save_prim_rat_srfs = iritstate( "PrimRatSrfs", save_prim_rat_srfs ):
+    save_prim_srfs = iritstate( "PrimType", save_prim_srfs ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_CONE", list( Center, Radius, Height, 
+						      Rational, Cap ) );
+
+GuIrit_STCone = function( Center, Radius1, Radius2, Height, Rational, 
+			  BottomBase, TopBase ): 
+			    Caps: save_prim_srfs: save_prim_rat_srfs:
+    if ( Rational == true, 
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", on ),
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", off ) ):
+    save_prim_srfs = iritstate( "PrimType", 1 ):
+    if ( BottomBase == true, 
+        Caps = 1, 
+        Caps = 0 ):
+    if ( TopBase == true, 
+        Caps = Caps + 2 ): 
+    return = con2( Center, vector( 0, 0, Height ), Radius1, Radius2, Caps ):
+    save_prim_rat_srfs = iritstate( "PrimRatSrfs", save_prim_rat_srfs ):
+    save_prim_srfs = iritstate( "PrimType", save_prim_srfs ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_TCONE", list( Center, Radius1, 
+						       Radius2, Height, 
+						       Rational, 
+						       BottomBase, TopBase ) );
+
+GuIrit_STorus = function( Center, MajorRadius, MinorRadius, Rational ):
+				    save_prim_srfs: save_prim_rat_srfs:
+    if ( Rational == true, 
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", on ),
+	save_prim_rat_srfs = iritstate( "PrimRatSrfs", off ) ):
+    save_prim_srfs = iritstate( "PrimType", 1 ):
+    return = torus( Center, vector( 0, 0, 1 ), MajorRadius, MinorRadius ):
+    save_prim_rat_srfs = iritstate( "PrimRatSrfs", save_prim_rat_srfs ):
+    save_prim_srfs = iritstate( "PrimType", save_prim_srfs ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_TORUS", list( Center,MajorRadius, 
+						       MinorRadius, 
+						       Rational ) );
+    
+GuIrit_SHermite = function( StartPosition, EndPosition, StartTangent, 
+			    EndTangent ): 
+    return = HERMITE( StartPosition, EndPosition, StartTangent, EndTangent ):  
+    GUpdateParams( Return, "IRT_MDLR_SRF_HERMITE", list( StartPosition, 
+							 EndPosition, 
+							 StartTangent, 
+							 EndTangent ) );
+ 
+GuIrit_SInterp = function( Uorder, Vorder, Ulength, Vlength, CtlPts ): Mesh:
+    Mesh = GetListOfListsOfMeshPts( CtlPts, ULength, VLength ):
+    return = SINTERP( Mesh, list(Uorder, Vorder, Ulength, Vlength, PARAM_UNIFORM ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_INTERPOL", list( Uorder, Vorder, 
+							  Ulength, Vlength, 
+							  CtlPts ) );
+
+GuIrit_Bilinear = function( LowerLeftpt, LowerRightpt, TopLeftpt, TopRightpt ):
+    return = ruledSrf( 0,
+		       coerce( LowerLeftpt, E3 ) + coerce( LowerRightpt, E3 ),
+		       coerce( TopLeftpt, E3 ) + coerce( TopRightpt, E3 ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_BILINEAR", list( LowerLeftpt, 
+							  LowerRightpt, 
+							  TopLeftpt, 
+							  TopRightpt ) );
+			
+GuIrit_SExtrude = function( Crv, ExtrudeDir, ExtrudeDirScale, ExtrudeTaper,
+			    ExtrudeSolid, JImprove ):
+    if ( ExtrudeSolid,
+	return = EXTRUDE( Crv, ExtrudeDir, 3 ),
+	return = EXTRUDE( Crv, ExtrudeDir, 0 ) ):
+    if ( ExtrudeDirScale != 1.0 || ExtrudeTaper != 1.0, 
+	GuIritScreamError("SExtrude: Only uniform scale and no tapring is support\\n") ):
+    if ( JImprove > 0,
+     	GuIritScreamError("SExtrude: Jacobian Improvements is not supported\\n") ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EXTRUDE", list( Crv, ExtrudeDir, 
+							 ExtrudeDirScale, 
+							 ExtrudeTaper,
+						         ExtrudeSolid,
+						         JImprove ) );
+
+GuIrit_SRuled = function( RuledOrder, RuledLength, Crv1, Crv2 ):
+    return = RULEDSRF( 0, Crv1, Crv2 ):	
+    if ( RuledOrder != 2 || RuledLength != 2,
+	GuIritScreamError("SRuled: Only linear Bezier plane is support\\n") ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_RULED", list( RuledOrder, RuledLength,
+						       Crv1, Crv2 ) );
+	
+GuIrit_SRev =  function( Crv, Rational, StartAngle, EndAngle  ):
+    if ( Rational == true, 
+ 	 return = SURFREV( Crv ),
+	 return = SURFPREV( Crv ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_SREV", list( Crv, Rational, StartAngle,
+						      EndAngle ) );
+   
+GuIrit_SBoolSum = function( LeftCurve, RightCurve, TopCurve,
+			    BottomCrve, JImprove ):	
+    return = BOOLSUM( 0, LeftCurve, RightCurve, TopCurve, BottomCrve ):
+    if ( JImprove > 0, 
+	return = SIMPJACOB( return, 0.0, JImprove ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_BOOL_SUM", list( LeftCurve, 
+							  RightCurve, 
+							  TopCurve, 
+							  BottomCrve,
+							  JImprove ) );
+
+GuIrit_SBoolOne = function( Curve, JImprove ):
+    return = BOOLONE( Curve ):
+    if ( JImprove > 0, 
+	return = SIMPJACOB( return, 0.0, JImprove ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_BOOL_ONE", list( Curve, JImprove ) );
+
+GuIrit_SFRMCRVS = function( CrvsInterpolate, CrvList, OtherOrder, OtherEndCond,
+			    CrvsParametrize, CrvsParameter ):
+    if ( OtherEndCond == 1, 
+	return = SFROMCRVS( CrvList, OtherOrder, KV_OPEN ),
+	if ( OtherEndCond == 0 || OtherEndCond == 2, 
+	    return = SFROMCRVS( CrvList, OtherOrder, KV_FLOAT ),
+	    return = SFROMCRVS( CrvList, OtherOrder, KV_PERIODIC ) ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_FROM_CRVS", list( CrvsInterpolate, 
+							   CrvList, OtherOrder,
+							   OtherEndCond, 
+							   CrvsParametrize, 
+							   CrvsParameter ) );
+
+GuIrit_SAlgCC = function( Crv1, Crv2, CurvesSum, CurvesProd, Swung ):
+    if ( CurvesSum == true, 
+	 return = ALGSUM( Crv1, Crv2 ),
+    if ( CurvesProd == true, 
+        GuIritScreamError("SRuled: Only linear Bezier plane is support\\n"):
+        return = nil(), 
+	if ( Swung == true, 
+	    return = SWUNGASUM( Crv1, Crv2 ) ) ) ): 
+    if ( return != nil(),
+	GUpdateParams( Return, "IRT_MDLR_SRF_ALG_CRVCRV", list( Crv1, Crv2, 
+							    CurvesSum, 
+							    CurvesProd, 
+							    Swung ) ) );
+   
+GuIrit_SSWEEP = function( SectionCurve, Trajectorycurve, Scalecurve,
+			  SectionScale, Refinement, Binormal ): 
+    if ( Binormal == vector(0, 0, 0),
+	Binormal = vector(0, 1, 0) ):
+    if ( thisobj( "ScaleCurve" ) == Curve_Type, 
+	return = SWPSCLSRF( SectionCurve, TrajectoryCurve, ScaleCurve, 
+			    Binormal, Refinement, 0 ), 
+        return = SWPSCLSRF( SectionCurve, TrajectoryCurve, SectionScale, 
+			    Binormal, Refinement, 0 ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_SWEEP", list( SectionCurve, 
+						       Trajectorycurve, 
+						       Scalecurve, 
+						       SectionScale, 
+						       Refinement, 
+						       Binormal ) );
+         
+GuIrit_STRIM = function( Srf, TCrvs, Tolerance ): tsrf1a: tsrf1b:
+   return = TRMSRFS(Srf, TCrvs ):
+   GUpdateParams( Return, "IRT_MDLR_SRF_TRIM", list( Srf, TCrvs, Tolerance ) );
+ 
+GuIrit_SDomain = function( Srf ):
+    return = PDOMAIN( Srf ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_DOMAIN", list( Srf ) );
+
+GuIrit_SEval = function( Srf, UParameter, VParameter ): 
+    return = SEVAL( Srf, UParameter, VParameter ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL", list( Srf, UParameter, 
+						      VParameter ) );
+
+GuIrit_STangent = function( Srf, UParameter, VParameter, Dir, UnitVec ):
+    return = STANGENT( Srf, Dir, UParameter, VParameter, UnitVec ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_TAN", list( Srf, UParameter, 
+							  VParameter, Dir, 
+							  UnitVec ) );
+
+GuIrit_SNormal = function( Srf, UParameter, VParameter, UnitVec ):
+    return = SNORMAL( Srf, UParameter, VParameter ):   
+    if ( UnitVec == false,
+	# CNORMAL normalize the vector any way so UnitVec=false doesn't work
+	GuIritScreamError("SNormal: Vector is always normalized.\\n") ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_NRML", list( Srf, UParameter, 
+							   VParameter, 
+							   UnitVec ) );
+  
+GuIrit_SCrvtr = function( Srf, UParameter, VParameter, DirUV ):
+    if ( DirUV == true,
+	return = SCRVTREVAL( Srf, UParameter, VParameter, false ),
+	return = SCRVTREVAL( Srf, UParameter, VParameter, true ) ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_CRVTR", list( Srf, UParameter, 
+							    VParameter, 
+							    DirUV ) );
+  
+GuIrit_SSilh = function( Srf, ViewDir, Tracing, Tolerance, Stepsize, SubdivTol,		# mismatch parameters (IRT_MDLR_SRF_EVAL_SILH) 
+			 NumericTol ):
+#    return = SSILINFL( Srf, ViewDir, SubdivTol, NumericTol);
+    GuIritScreamError("SSilh: Script function is not supported!"):
+    return = nil();
+    
+GuIrit_SBndry = function( Srf ):
+    return = BOUNDARY( Srf ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_BNDRY", list( Srf ) );
+    
+GuIrit_SPlgn = function( Srf, Adaptive, TrianglesOnly, Tolerance, EdgeLen ): 
+			save_approx_opt:			 
+    save_approx_opt = poly_approx_opt:
+    if ( Adaptive,
+	 poly_approx_opt = 1,
+	 poly_approx_opt = 0):
+    resolution = tolerance:
+    if ( TrianglesOnly,
+	 poly_approx_tri = true):
+    return = gpolygon( Srf, true ):
+    poly_approx_opt = save_approx_opt:
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_PLGN_TESS", list( Srf, Adaptive, 
+								TrianglesOnly, 
+								Tolerance, 
+								EdgeLen ) );
+	
+GuIrit_SPlln = function( Srf, Adaptive, NumUIso, NumVIso, NumWIso, Tolerance ):		# different results 
+    resolution = tolerance:
+    return = gpolyline( Srf, 0 ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_PLLN_TESS", list( Srf, Adaptive, 
+								NumUIso, 
+								NumVIso, 
+								NumWIso, 
+								Tolerance ) );
+	   
+GuIrit_SSInter = function( Srf1, Srf2, StepSize, SubdivTol, NumerTol, 
+			   InterEuclidean ):  
+   return = SSINTR2( Srf1, Srf2, StepSize, SubdivTol, NumerTol, 
+		     InterEuclidean, FALSE ):  
+   GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_INTER", list( Srf1, Srf2, 
+							   StepSize, SubdivTol,
+							   NumerTol, 
+							   InterEuclidean ) );
+
+GuIrit_SSBlend = function( Srf1, Srf2, BlendFactor ):
+    FFCOMPAT( Srf1, Srf2):
+    return = SMORPH( Srf1, Srf2, BlendFactor ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_EVAL_BLEND", list( Srf1, Srf2, 
+							    BlendFactor ) );
+
+GuIrit_SEditCtlPt = function( Srf, Uindex, Vindex, NewCoords ):
+    return = SEDITPT( Srf, ctlpt( E3, coord( NewCoords, 0 ),
+				      coord( NewCoords, 1 ), 
+				      coord( NewCoords, 2 )), Uindex, Vindex ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_EDIT_PT", list( Srf, Uindex, Vindex, 
+							 NewCoords ) );
+
+GuIrit_EditSrf = function( Srf, UOrder, VOrder, ULength, VLength, UEndCond, 
+			   DisplayUKV, UKV, VEndCond, DisplayVKV, VKV, CtlPts ): Mesh:
+	Mesh = GetListOfListsOfMeshPts( CtlPts, ULength, VLength ):					   
+	if ( SizeOf(UKV) > 0 && SizeOf(VKV) > 0,
+		return = SBSPLINE( UOrder, VOrder, Mesh, list( UKV, VKV ) ),
+		return = SBEZIER( Mesh ) ):
+	 GUpdateParams( Return, "IRT_MDLR_SRF_EDIT_SRF", list( Srf, UOrder, VOrder,
+					ULength, VLength, UEndCond, DisplayUKV, UKV, VEndCond, 
+					DisplayVKV, VKV, CtlPts ) ); 	
+
+GuIrit_MRSRFEDIT = function( SrfExpr, CtlPtEdit, Rational, UOrder, VOrder, 
+							 UEndCond, VEndCond, USupport, VSupport ):
+    GuIritScreamError("MRSRFEDIT: Script function is not supported!"):
+    return = nil();
+					
+GuIrit_SDivide = function( Srf, SubdivParam, SubdivDir ):
+    return = SDIVIDE( Srf, SubdivDir, SubdivParam ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_DIVIDE", list( Srf, SubdivParam, 
+							SubdivDir ) );
+
+GuIrit_SRaise = function( Srf, NewUOrder, NewVOrder ):
+    return = SRAISE( Srf, COL, NewUOrder ):
+    return = SRAISE( return, ROW, NewVOrder ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_RAISE", list( Srf, NewUOrder, 
+						       NewVOrder ) );
+
+GuIrit_SREPARAM = function( SrfExpr, StartParam, EndParam, Direction ):
+    GuIritScreamError("SREPARAM: Script function is not supported!"):
+    return = nil();
+
+GuIrit_SRegion = function( Srf, StartParam, EndParam, SrfDir ):
+    return = SREGION( Srf, SrfDir, StartParam, EndParam ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_REGION", list( Srf, StartParam,
+						        EndParam, SrfDir ) );
+
+GuIrit_SRefine = function( Srf, RefineKnot, RefineAll, RefineDir ):
+    if ( RefineAll,
+	 GuIritScreamError("Function SRefine not supported for refine all.\\n"):
+         return = nil(),
+         return = SREFINE( Srf, RefineDir, false, list(RefineKnot) ): 
+	 GUpdateParams( Return, "IRT_MDLR_SRF_REFINE", list( Srf, RefineKnot, 
+							     RefineAll, 
+							     RefineDir ) ) );
+
+GuIrit_SREVERSE = function( SrfExpr, ReverseType ):
+    GuIritScreamError("SREVERSE: Script function is not supported!"):
+    return = nil();
+								 
+GuIrit_SOffset = function( Srf, OffsetDist, Tolerance ):
+    return = OFFSET( Srf, OffsetDist, Tolerance, off ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_OFFSET", list( Srf, OffsetDist, 
+							Tolerance ) );
+
+GuIrit_SShell = function( Srf, Dist1, Dist2, Tolerance, SeparatedSrfs ):
+    Srf1: Srf2:		
+#    Srf1 = GuIrit_SOffset( Srf, Dist1, Tolerance ):   # This sequence doesnt work 
+#    Srf2 = GuIrit_SOffset( Srf, Dist2, Tolerance ):
+#    return = SSHELL( Srf1, Srf2 );
+    GuIritScreamError("SShell: Script function is not supported!"):
+    return = nil();
+    
+GuIrit_SDerive = function( Srf, DeriveDir ):
+    return = SDERIVE( Srf, DeriveDir ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_DERIVE", list( Srf, DeriveDir ) );
+
+GuIrit_SIntegrt = function( Srf, IntegrtDir ):	    
+    return = SINTEG( Srf, IntegrtDir ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_INTEGRATE", list( Srf, IntegrtDir ) );
+
+GuIrit_SNrmlSrf = function( Srf ):
+    return = SNRMLSRF( Srf ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_NRML_SRF", list( Srf ) );
+
+GuIrit_SGauss = function( Srf ):
+    return = SGAUSS( Srf, false ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_GAUSS", list( Srf ) );
+ 
+GuIrit_SParabLns = function( Srf, LinsDecompose, Euclidean ):
+    return = SPARABOLC( Srf, 0.01, 1e-8, Euclidean, LinsDecompose ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_PARAB_LINES", list( Srf, 
+							     LinsDecompose,
+							     Euclidean ) );
+   
+GuIrit_SSymbAdd = function( Srf1, Srf2 ):   
+    return = SYMBSUM( Srf1, Srf2 ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_ADD", list( Srf1, Srf2 ) );
+  
+GuIrit_SSymbSub = function( Srf1, Srf2 ):   
+    return = SYMBDIFF(  Srf1, Srf2 ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_SUB", list( Srf1, Srf2 ) );
+  
+GuIrit_SSymbMult = function( Srf1, Srf2 ):  
+    return = SYMBPROD(  Srf1, Srf2 ):  
+    GUpdateParams( Return, "IRT_MDLR_SRF_MULT", list( Srf1, Srf2 ) );
+
+GuIrit_SSymbDProd = function( Srf1, Srf2 ): 
+    return = SYMBDPROD( Srf1, Srf2 ): 
+    GUpdateParams( Return, "IRT_MDLR_SRF_DOT_PROD", list( Srf1, Srf2 ) );
+    
+GuIrit_SSymbCProd = function( Srf1, Srf2 ): 
+    return = SYMBCPROD( Srf1, Srf2 ):       
+    GUpdateParams( Return, "IRT_MDLR_SRF_CROSS_PROD", list( Srf1, Srf2 ) );
+
+GuIrit_CSrfProj = function( Srf, Crv, Orthogonal, Direction, Reduction,
+	 		    Tolerance):
+    if ( Orthogonal == true, 
+	return = CSRFPROJ( Crv, Srf, Tolerance, false ):
+	GUpdateParams( Return, "IRT_MDLR_SRF_SKTCH_PROJ", list( Srf, Crv, 
+							        Orthogonal, 
+							        Direction, 
+							        Reduction, 
+							        Tolerance ) ),
+	GuIritScreamError("CSrfProj:  Only orthogonal projection is supported\\n"): 
+	return = nil() );
+#
+#TRIVARS Tab functions---------------					    Check All Trivars
+#
+ 
+GuIrit_ExtrudeTV = function( Srf, ExtrudeVec):				
+    return = EXTRUDE( Srf, ExtrudeVec, false):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EXTRUDE", list( Srf,
+							    ExtrudeVec ) );
+
+GuIrit_RuledTV = function( Srf1, Srf2 ):			   
+    return = RULEDTV( 0, Srf1, Srf2 ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_RULED", list( Srf1, Srf2 ) );
+ 
+GuIrit_TVOfRev = function( Srf, Rational, MinAngle, MaxAngle ):
+    if ( Rational == false || MinAngle != 0 || MaxAngle != 360, 
+	GuIritScreamError("TVOfRev: if Rational != TRUE OR MinAngle != 0 OR MaxAngle != 360 Function is not supported\\n") ): 
+    return = TVREV( Srf ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_OF_REV", list( Srf, Rational, 
+							   MinAngle, 
+							   MaxAngle ) );
+
+GuIrit_TVFromSrfs = function( Interpolate, SrfsList, Order, EndCond, Parametrize,	 	
+			      Parameter ):
+    if ( Interpolate, 
+	GuIritScreamError("TVFromSrfs: Interpolate surfaces is not supported\\n") ): 
+    if ( EndCond == 1, 
+	return = TFROMSRFS( SrfsList, Order, KV_OPEN ),
+	if ( EndCond == 0 || EndCond == 2, 
+	    return = TFROMSRFS( SrfsList, Order, KV_FLOAT ),
+	    return = TFROMSRFS( SrfsList, Order, KV_PERIODIC ) ) ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_FROM_SRFS", list( Interpolate, 
+							      SrfsList, 
+							      Order, EndCond, 
+							      Parametrize,
+							      Parameter  ) );
+  
+GuIrit_TVBoolSum = function( Srf1, Srf2, Srf3, Srf4, TopSrf, BottomSrf ):
+    return = TBOOLSUM( 0, Srf1, Srf2, Srf3, Srf4, TopSrf, BottomSrf ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_BOOL_SUM", list( Srf1, Srf2, Srf3, 
+							     Srf4, TopSrf, 
+							     BottomSrf ) );
+
+GuIrit_TVBoolOne = function( Srf ):
+    return = TBOOLONE( Srf ):		     
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_BOOL_ONE", list( Srf ) );
+ 
+GuIrit_TVBlnd2TVs = function( TV1, TV2, BlendFactor ): 
+    return = TMORPH(  TV1, TV2, BlendFactor ):
+    GUpdateParams( Return, "IRT_MDLR_2TVMORPHING_TRIVAR", list( TV1, TV2, 
+								BlendFactor ) );
+    
+GuIrit_TVLoadVol = function( Filename, Filedatatype, SizeX, SizeY, SizeZ, 
+			     UValue, VValue, WValue ):
+    return = TVLOAD( Filename, Filedatatype, Vector( SizeX, SizeY, SizeZ ), 
+		     Vector( UValue, VValue, WValue ) ):		     
+    GUpdateParams( Return, "IRT_MDLR_LOAD_VOLUME_TRIVAR", list( Filename, 
+								Filedatatype, 
+								SizeX, SizeY, 
+								SizeZ, UValue, 
+								VValue, 
+								WValue ) );
+
+GuIrit_TVEditPt = function( TV, MeshUindex, MeshVindex, MeshWindex,
+			    NewCtlPoint ):			 
+    return = TEDITPT( TV, ctlpt( E3, coord( NewCtlPoint, 0 ),
+				      coord( NewCtlPoint, 1 ), 
+				      coord( NewCtlPoint, 2 )), MeshUindex, 
+				      MeshVindex, MeshWindex ): 
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EDIT_PT", list( TV, MeshUindex, 
+							    MeshVindex, 
+							    MeshWindex, 
+							    NewCtlPoint ) );
+
+GuIrit_TVDivide = function( TV, ParamVal, TrivarDir):
+    return = TDIVIDE( TV, ParamVal, TrivarDir ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_DIVIDE", list( TV, ParamVal, 
+							   TrivarDir ) );
+
+GuIrit_TVRaise = function( TV, Order, Dir ):
+    return = TRAISE( TV, Dir, Order ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_RAISE", list( TV, Order, Dir ) );
+
+GuIrit_TVRegion = function( TV, MinParam, MaxParam, Dir ):
+    return = TREGION( TV, Dir, MinParam, MaxParam ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_REGION", list( TV, MinParam, 
+							   MaxParam, Dir ) );
+
+GuIrit_TVRefine = function( TV, ParmVal, RefineDir, RefineAll ):
+    if ( RefineAll,
+	 GuIritScreamError("TVRefine: Function TRefine not supported for refine all.\\n"):
+         return = nil(),
+         return = TREFINE( TV, RefineDir, false, list(ParmVal) ):
+	 GUpdateParams( Return, "IRT_MDLR_TRIVAR_REFINE", list( TV, ParmVal, 
+							   RefineDir, 
+							   RefineAll ) ) );
+        
+GuIrit_TVDerive = function( TV, DeriveDir ):
+    return = TDERIVE( TV, DeriveDir ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_DERIVE", list( TV, DeriveDir ) );
+
+GuIrit_SrfFromTV = function( TV, ParmVal, Dir ):
+    return = STRIVAR( TV, Dir, ParmVal ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_FROM_TRIVAR", list( TV, ParmVal, 
+							     Dir ) );
+
+GuIrit_SrfFromTVMesh = function( TV, RIndex, RDir ):
+    return = SMESH( TV, RDir, RIndex ):
+    GUpdateParams( Return, "IRT_MDLR_SRF_FROM_TVMESH",
+		   list( TV, RIndex, RDir ) );
+
+GuIrit_TVZeroJacob = function( TV, Euclidean, Sampling, Refine ):
+    return = TVZRJACOB( TV, Euclidean, Sampling, Refine ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_ZERO_JACOB",
+		   list( TV, Euclidean, Sampling, Refine ) );
+    
+GuIrit_TVDomain = function( TV ):
+    return = PDOMAIN( TV ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EVAL_DOMAIN", list( TV ) );
+
+GuIrit_TVEval = function( TV, ParamVal ): 
+    return = TEVAL( TV, coord( ParamVal, 0 ), coord( ParamVal, 1 ),
+		    coord( ParamVal, 2 ) ):    
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EVAL", list( TV, ParamVal ) );
+    
+GuIrit_TVGradient = function( TV, ParamVal ):
+    ParamVal = coerce( ParamVal, point_type ):
+    dummy = TCRVTR( TV, ParamVal, -1 ):
+    return =  TCRVTR( TV, ParamVal, 1 ):
+    dummy = TCRVTR( TV, ParamVal, 0 ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EVAL_GRADIENT", list( TV, 
+								  ParamVal ) );
+    
+GuIrit_TVHessian = function( TV, ParamVal ):
+    ParamVal = coerce( ParamVal, point_type ):
+    dummy = TCRVTR( TV, ParamVal, -1 ):
+    return =  TCRVTR( TV, ParamVal, 2 ):
+    dummy = TCRVTR( TV, ParamVal, 0 ):  
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EVAL_HESSIAN", list( TV, 
+								 ParamVal ) );
+    
+GuIrit_TVCurvature = function( TV, ParamVal ):
+    ParamVal = coerce( ParamVal, point_type ):
+    dummy = TCRVTR( TV, ParamVal, -1 ):
+    return =  TCRVTR( TV, ParamVal, 3 ):
+    dummy = TCRVTR( TV, ParamVal, 0 ):
+    GUpdateParams( Return, "IRT_MDLR_TRIVAR_EVAL_CRVTR", list( TV, 
+							       ParamVal ) );
+    
+GuIrit_IGA = function( TemplateFile, MaterialList, FieldList, TrivariatesList,
+			BoundaryAxisCondition0, BoundaryAxisCondition1, 
+			BoundaryAxisCondition2, BoundaryOffset,	FacesList, 
+			Arrangment_File ):
+    GuIritScreamError("IGA: Script function is not supported!"):
+    return = nil();
+
+#prop_names = iritstate("PropagateNames", false);
+#hierar_visible = iritstate("HierarchyVisible", false);
+   
+dummy = iritState("EchoSource", true);
+   

@@ -1,0 +1,3 @@
+s0 = SPHERE(vector(0,0,0),1.0);
+interact(list(axes,s0));
+exit();

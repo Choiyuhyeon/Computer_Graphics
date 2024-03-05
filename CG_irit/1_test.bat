@@ -1,0 +1,1 @@
+c:\cg_irit\irit64.exe 2_test.irt

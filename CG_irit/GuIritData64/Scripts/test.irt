@@ -1,0 +1,137 @@
+#
+# Test file to include scripts without any pause.
+#
+pause = procedure():
+    printf("Press return to continue:\\n", nil());
+miliSleep = procedure( n ):
+    printf("", nil());
+
+iritstate( "FloatFrmt", "%-.12f" );
+
+# x = iritstate("MVNConeTst", 1 );
+
+chdir("c:/irit/irit/scripts");
+
+include("adap_iso.irt");
+include("algsum.irt");
+include("ambiguit.irt");
+include("ant.irt");
+include("antipodl.irt");
+include("arc_len.irt");
+include("aspct_gr.irt");
+include("b58.irt");
+include("bed.irt");
+include("bez_clip.irt");
+include("biarc.irt");
+include("box-box.irt");
+include("bsct_smp.irt");
+include("bulb.irt");
+include("bzrzrfct.irt");
+include("cbisect2.irt");
+include("cci_prop.irt");
+include("cenvoff.irt");
+include("chess.irt");
+include("closloop.irt");
+include("cone-cyl.irt");
+include("cone2cyl.irt");
+include("cone3cyl.irt");
+include("conics.irt");
+include("control.irt");
+include("corkplug.irt");
+include("crosplug.irt");
+include("crvdecmp.irt");
+include("crvtrlns.irt");
+include("crvtrrec.irt");
+include("crv_arng.irt");
+include("crv_bool.irt");
+include("crv_dist.irt");
+include("crv_krnl.irt");
+include("crv_tan.irt");
+include("cslogo.irt");
+include("csrfproj.irt");
+include("cubcaprx.irt");
+include("cube.irt");
+include("cube2.irt");
+include("cube3cut.irt");
+include("cubes.irt");
+include("cube_spr.irt");
+include("cup.irt");
+include("cupmodel.irt");
+include("cylin3.irt");
+include("decimate.irt");
+include("dinner.irt");
+include("disjoint.irt");
+include("disp_map.irt");
+include("distmtch.irt");
+include("domino.irt");
+include("ellipses.irt");
+include("extrema.irt");
+include("f16.irt");
+include("facemask.irt");
+include("ffloops.irt");
+include("ffptdist.irt");
+include("ff_extnd.irt");
+include("flecnodl.irt");
+include("flippage.irt");
+include("gearbox.irt");
+include("glocal.irt");
+include("gpolylin.irt");
+include("handset.irt");
+include("hermite.irt");
+include("interpol.irt");
+include("isocline.irt");
+include("knotrmvl.irt");
+include("knots.irt");
+include("KnotVase.irt");
+include("lj8000.irt");
+include("ln2circ.irt");
+include("logos.irt");
+include("macros.irt");
+include("make_spr.irt");
+include("mbisect.irt");
+include("mdl1bool.irt");
+include("mdl_sd2a.irt");
+include("mdl_sd2b.irt");
+include("mdl_sld2.irt");
+include("mdl_sld6.irt");
+include("molecule.irt");
+include("moments.irt");
+include("mrchcube.irt");
+include("multivar.irt");
+include("mvexplct.irt");
+include("nc5axis.irt");
+include("nc_tpath.irt");
+include("ofstmtch.irt");
+include("pdvl_srf.irt");
+include("platonic.irt");
+include("polygons.irt");
+include("pp_apprx.irt");
+include("primitiv.irt");
+include("primsrfs.irt");
+include("prim_fit.irt");
+include("printf.irt");
+include("print_it.irt");
+include("prisa.irt");
+include("prisanim.irt");
+include("prismovi.irt");
+include("prld_srf.irt");
+include("psubdiv.irt");
+include("pt_incld.irt");
+include("pulleys.irt");
+include("puz12pcs.irt");
+include("puz3cube.irt");
+include("puz4pcs.irt");
+include("puzcubes.irt");
+include("puzzles.irt");
+include("puz_anim.irt");
+include("puz_crnr.irt");
+include("puz_cube.irt");
+include("puz_dvd.irt");
+include("puz_snak.irt");
+
+if ( machine == sgi ||
+     machine == sun ||
+     machine == hp ||
+     machine == linux ||
+     machine == macosx ||
+     machine == unix, system( "ps -l | grep irit" ) );

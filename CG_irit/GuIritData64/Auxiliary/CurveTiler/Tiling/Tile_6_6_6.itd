@@ -1,0 +1,31 @@
+[OBJECT [transp 0] [rgb "255,255,0"]  [TileTopo "012"]
+	[vec1 "C0P1_C1P2"] [vec2 "C0P2_C2P2"]
+    [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] Tile_6_6_6
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [rgb "255,255,0"] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_6_6_6_A\";LP2,E3 0 0.5 0,E3 0.2 1 0;I2;E1;X2,0,1,1,1, 1;"]
+	[transp 0] Tile_6_6_6_A
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0. 0.5 0.]
+	    [0.2 1. 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [transp 0] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_6_6_6_B\";LP2,E3 0.2 1 0,E3 0.8 1 0;I2;E1;X2,0,1,1,1, 1;"]
+	[rgb "255,255,0"] Tile_6_6_6_B
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.2 1. 0.]
+	    [0.8 1. 0.]
+	]
+    ]
+    [OBJECT [ObjWrapper _REFPTR_ATTR_NOT_CNVRTED_] [rgb "255,255,0"] 
+	[IrtMdlrPrms "FIRT_MDLR_CRV_BSPLINE;G\"Tile_6_6_6_C\";LP2,E3 0.8 1 0,E3 1 0.5 0;I2;E1;X2,0,1,1,1, 1;"]
+	[transp 0] Tile_6_6_6_C
+	[CURVE BSPLINE 2 2 E3
+	    [KV 0. 0. 1. 1.]
+	    [0.8 1. 0.]
+	    [1. 0.5 0.]
+	]
+    ]
+]

@@ -1,0 +1,66 @@
+Axes1X = arrow3d( point( 0.0, 0.0, 0.0 ), vector( 1.0, 0.0, 0.0 ),
+		   1.18, 0.01, 0.18, 0.025 );
+attrib( Axes1X, "rgb", "255, 0, 0" );
+
+Axes1Y = arrow3d( point( 0.0, 0.0, 0.0 ), vector( 0.0, 1.0, 0.0 ),
+		   1.18, 0.01, 0.18, 0.025 );
+attrib( Axes1Y, "rgb", "0, 255, 0" );
+
+Axes1Z = arrow3d( point( 0.0, 0.0, 0.0 ), vector( 0.0, 0.0, 1.0 ),
+		   1.18, 0.01, 0.18, 0.025 );
+attrib( Axes1Z, "rgb", "0, 0, 255" );
+
+Axes1 = list( Axes1X, Axes1Y, Axes1Z );
+attrib( Axes1, "MenuName", "Axes with arrows" );
+
+view( list( axes, Axes1 ), 1 );
+
+#############################################################################
+
+Axes2Z = CylinSrf( 1, 0.005 );
+attrib( Axes2Z, "rgb", "0, 0, 255" );
+
+Axes2X = Axes2Z * ry( 90 );
+attrib( Axes2X, "rgb", "255, 0, 0" );
+
+Axes2Y = Axes2Z * rx( -90 );
+attrib( Axes2Y, "rgb", "0, 255, 0" );
+
+Axes2 = list( Axes2X, Axes2Y, Axes2Z );
+attrib( Axes2, "MenuName", "Axes with no arrows" );
+
+view( list( axes, Axes2 ), 1 );
+
+#############################################################################
+
+Axes3X = list( poly( list( vector( 0., 0., 0. ),
+	       	           vector( 1., 0., 0. ),
+	                   vector( 1., 0.1, 0.1 ) ), true ),
+               poly( list( vector( 1., 0.1, 0. ),
+        	           vector( 1., 0., 0.1 ) ), true ) );
+attrib( Axes3X, "rgb", "255, 0, 0" );
+Axes3Y = poly( list( vector( 0., 0., 0. ),
+        	     vector( 0., 1., 0. ),
+                     vector( 0., 1., 0.06 ),
+                     vector( 0.04, 1., 0.1 ),
+                     vector( 0., 1., 0.06 ),
+                     vector( -0.04, 1., 0.1 ) ), true );
+attrib( Axes3Y, "rgb", "0, 255, 0" );
+Axes3Z = poly( list( vector( 0., 0., 0. ),
+        	     vector( 0., 0., 1. ),
+                     vector( 0.1, 0., 1. ),
+                     vector( 0., 0.1, 1. ),
+                     vector( 0.1, 0.1, 1. ) ), true );
+attrib( Axes3Z, "rgb", "0, 0, 255" );
+
+Axes3 = list( Axes3X, Axes3Y, Axes3Z );
+attrib( Axes3, "MenuName", "Wireframe axes" );
+
+view( list( axes, Axes3 ), 1 );
+
+#############################################################################
+
+GuIritAxes = list( Axes1, Axes2, Axes3 );
+
+save( "GuIritAxes", GuIritAxes );
+

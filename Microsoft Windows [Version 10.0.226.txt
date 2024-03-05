@@ -1,0 +1,16 @@
+Microsoft Windows [Version 10.0.22621.2861]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\win>cd c:\cg_irit
+
+c:\CG_irit>Irit64
+                Irit64 - the not only polygonal solid modeller
+(C) Copyright 1989-2023 Gershon Elber, Technion, Windows Ver. 13, Feb 22 2024
+                         Written by Gershon Elber
+iritinit >
+Irit> ^D
+^D
+Irit> irit64 scripts/CSGExample.irt
+irit64 scripts/CSGExample.irt
+Irit>
+
