@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="w3-lab.cpp">
+    <ClCompile Include="triangle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
