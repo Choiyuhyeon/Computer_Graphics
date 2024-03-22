@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="triangle.cpp">
+    <ClCompile Include="w2-hmadd.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
