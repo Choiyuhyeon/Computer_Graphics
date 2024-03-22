@@ -6,10 +6,10 @@ void display() {
 
     glColor3f(1.0f, 1.0f, 0.0f); // 0.0 ~ 1.0
 
-    glBegin(GL_TRIANGLES); // GL_TRIANGLES
-    glVertex2f(-0.5f, -0.5f); // 첫 번째 정점
-    glVertex2f(0.5f, -0.5f); // 두 번째 정점
-    glVertex2f(0.0f, 0.5f); // 세 번째 정점
+    glBegin(GL_TRIANGLES); 
+    glVertex2f(-0.5f, -0.5f);
+    glVertex2f(0.5f, -0.5f); 
+    glVertex2f(0.0f, 0.5f);
     glEnd();
 
     glFinish();
