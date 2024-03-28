@@ -13,12 +13,13 @@ Vec2 linePt[4] = {
 };
 
 void greendot() {
+    // 접점 계산 함수
     float x1 = linePt[0].x, y1 = linePt[0].y;
     float x2 = linePt[1].x, y2 = linePt[1].y;
     float x3 = linePt[2].x, y3 = linePt[2].y;
     float x4 = linePt[3].x, y4 = linePt[3].y;
 
-    float xMin = -1.0f, xMax = 1.0f, yMin = -1.0f, yMax = 1.0f;
+    float xMin = -1.0f, xMax = 1.0f, yMin = -1.0f, yMax = 1.0f; // 화면의 범위
     bool intersectionFound = false;
 
     float denominator = ((y4 - y3) * (x2 - x1)) - ((x4 - x3) * (y2 - y1));
@@ -34,6 +35,7 @@ void greendot() {
         float intersectionX = x1 + (ua * (x2 - x1));
         float intersectionY = y1 + (ua * (y2 - y1));
 
+        // Check if intersection point is within screen boundaries
         if (intersectionX >= xMin && intersectionX <= xMax && intersectionY >= yMin && intersectionY <= yMax) {
             glColor3f(0.0, 1.0, 0.0);
             glPointSize(10.0);
@@ -59,7 +61,7 @@ void greendot() {
 void display() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
     glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_LINES);
     glVertex2f(linePt[0].x, linePt[0].y);
@@ -74,16 +76,11 @@ void display() {
 
     greendot();
 
-    printf("Vertex coordinates:\n");
-    printf("Vertex 1: (%.2f, %.2f)\n", linePt[0].x, linePt[0].y);
-    printf("Vertex 2: (%.2f, %.2f)\n", linePt[1].x, linePt[1].y);
-    printf("Vertex 3: (%.2f, %.2f)\n", linePt[2].x, linePt[2].y);
-    printf("Vertex 4: (%.2f, %.2f)\n", linePt[3].x, linePt[3].y);
-
     glutSwapBuffers();
 }
 
-void keyboard(unsigned char key, int x, int y) {
+void keyboard(unsigned char key, int x, int y) { 
+
     switch (key) {
     case 'w':
         linePt[0].y += 0.1f;
@@ -101,17 +98,17 @@ void keyboard(unsigned char key, int x, int y) {
         linePt[0].x += 0.1f;
         linePt[1].x += 0.1f;
         break;
-    case 27: // ESC
+    case 27: // 종료
         exit(0);
         break;
     }
     glutPostRedisplay();
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(1480, 100);
 
