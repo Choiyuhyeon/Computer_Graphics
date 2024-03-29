@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Åä³¢ ¸ö -->
+  <!-- ï¿½ä³¢ ï¿½ï¿½ -->
   <circle cx="100" cy="100" r="80" fill="#ffdab9"/>
-  <!-- Åä³¢ ±Í -->
+  <!-- ï¿½ä³¢ ï¿½ï¿½ -->
   <ellipse cx="60" cy="70" rx="30" ry="45" fill="#ffdab9"/>
   <ellipse cx="140" cy="70" rx="30" ry="45" fill="#ffdab9"/>
-  <!-- ´« -->
+  <!-- ï¿½ï¿½ -->
   <circle cx="75" cy="80" r="10" fill="#fff"/>
   <circle cx="125" cy="80" r="10" fill="#fff"/>
-  <!-- ´«µ¿ÀÚ -->
+  <!-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -->
   <circle cx="75" cy="80" r="4" fill="#000"/>
   <circle cx="125" cy="80" r="4" fill="#000"/>
-  <!-- ÄÚ -->
+  <!-- ï¿½ï¿½ -->
   <circle cx="100" cy="100" r="5" fill="#000"/>
-  <!-- ÀÔ -->
+  <!-- ï¿½ï¿½ -->
   <path d="M 80 120 Q 100 140 120 120" fill="none" stroke="#000" stroke-width="4"/>
 </svg>
