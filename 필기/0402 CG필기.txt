@@ -1,0 +1,23 @@
+0402 CG필기
+
+바운딩 볼륨 
+
+
+Bounding Volumes에서 중요*
+dist(c0,c1) == rort1
+
+
+1. AABB
+2. OBB 
+
+3번째 그림 : 물체의 크기에 맞춰 공간 최소화 (box)
+4번쨰 그림 : 다각형으로
+
+
+Frustum Culling
+
+-intersect
+
+
+과제 설명
+
