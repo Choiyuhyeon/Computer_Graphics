@@ -6,7 +6,7 @@
 #include <memory>
 #include <cmath>
 
-using Real = float;
+using Real = double;
 using Vec2 = struct Vec2 { Real x, y; };
 using Vec3 = struct Vec3 { Real x, y, z; };
 
