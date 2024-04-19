@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A5029F8E-0D8B-4312-8D0E-A5E07175AB0F}|CompGrap\\CompGrap.vcxproj|C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\bezier2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A5029F8E-0D8B-4312-8D0E-A5E07175AB0F}|CompGrap\\CompGrap.vcxproj|solutionrelative:CompGrap\\bezier2.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A5029F8E-0D8B-4312-8D0E-A5E07175AB0F}|CompGrap\\CompGrap.vcxproj|C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\homework-6week.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A5029F8E-0D8B-4312-8D0E-A5E07175AB0F}|CompGrap\\CompGrap.vcxproj|solutionrelative:CompGrap\\homework-6week.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "bezier2.cpp",
-              "DocumentMoniker": "C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\bezier2.cpp",
-              "RelativeDocumentMoniker": "CompGrap\\bezier2.cpp",
-              "ToolTip": "C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\bezier2.cpp",
-              "RelativeToolTip": "CompGrap\\bezier2.cpp",
-              "ViewState": "AQIAAFoAAAAAAAAAAAAawJMAAAAAAAAA",
+              "Title": "homework-6week.cpp",
+              "DocumentMoniker": "C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\homework-6week.cpp",
+              "RelativeDocumentMoniker": "CompGrap\\homework-6week.cpp",
+              "ToolTip": "C:\\Users\\wf487\\OneDrive\\\uBC14\uD0D5 \uD654\uBA74\\uni\\\uCEF4\uD4E8\uD130\uADF8\uB798\uD53D\uC2A4\\Computer_Graphics\\CompGrap\\CompGrap\\CompGrap\\homework-6week.cpp",
+              "RelativeToolTip": "CompGrap\\homework-6week.cpp",
+              "ViewState": "AQIAADABAAAAAAAAAAAowEcBAAAfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-04-04T11:33:28.547Z",
+              "WhenOpened": "2024-04-19T13:10:11.157Z",
               "EditorCaption": ""
             }
           ]

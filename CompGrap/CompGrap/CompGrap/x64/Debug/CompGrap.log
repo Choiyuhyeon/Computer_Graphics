@@ -1,1 +1,19 @@
-﻿  CompGrap.vcxproj -> C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\x64\Debug\CompGrap.exe
+﻿  homework-6week.cpp
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\GCBezierCurve.h(80,21): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'homework-6week.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(118,26): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(118,19): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(119,26): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(119,19): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(120,26): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(120,19): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(121,26): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(121,19): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(153,28): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(153,22): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(159,28): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(159,22): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(167,28): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\CompGrap\homework-6week.cpp(167,22): warning C4244: '인수': 'Real'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CompGrap.vcxproj -> C:\Users\wf487\OneDrive\바탕 화면\uni\컴퓨터그래픽스\Computer_Graphics\CompGrap\CompGrap\x64\Debug\CompGrap.exe
