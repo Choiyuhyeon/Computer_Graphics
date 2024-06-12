@@ -1,12 +1,12 @@
-#include "gl/glut.h"  // GLUT ¶óÀÌºê·¯¸® Çì´õ ÆÄÀÏÀ» Æ÷ÇÔ
+#include "gl/glut.h"  // GLUT ï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 #include <cstdio>
 
-// 2Â÷¿ø º¤ÅÍ ±¸Á¶Ã¼ Á¤ÀÇ
+// 2ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 struct Vec2 {
     float x, y;
 };
 
-// ¼±ÀÇ µÎ Á¡À» ÀúÀåÇÏ´Â ¹è¿­
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½è¿­
 Vec2 linePt[4] = {
     {-0.3f, 0.2f},
     {0.6f, -0.7f},
@@ -14,80 +14,97 @@ Vec2 linePt[4] = {
     {0.5f, 0.0f}
 };
 
-// OpenGLÀ» »ç¿ëÇÏ¿© ±×·¡ÇÈÀ» ±×¸®´Â display ÇÔ¼ö
+
 void display() {
-    // È­¸éÀ» Èò»öÀ¸·Î Áö¿ì±â
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // »¡°£»öÀ¸·Î Ã¹ ¹øÂ° ¼± ±×¸®±â
     glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_LINES);
-    glVertex2f(linePt[0].x, linePt[0].y);  // Ã¹ ¹øÂ° Á¡
-    glVertex2f(linePt[1].x, linePt[1].y);  // µÎ ¹øÂ° Á¡
+    glVertex2f(linePt[0].x, linePt[0].y);  
+    glVertex2f(linePt[1].x, linePt[1].y);  
     glEnd();
 
-    // ÆÄ¶õ»öÀ¸·Î µÎ ¹øÂ° ¼± ±×¸®±â
     glColor3f(0.0, 0.0, 1.0);
     glBegin(GL_LINES);
-    glVertex2f(linePt[2].x, linePt[2].y);  // ¼¼ ¹øÂ° Á¡
-    glVertex2f(linePt[3].x, linePt[3].y);  // ³× ¹øÂ° Á¡
+    glVertex2f(linePt[2].x, linePt[2].y); 
+    glVertex2f(linePt[3].x, linePt[3].y);
     glEnd();
 
-    // ³ì»ö Á¡ Âï±â (±³Á¡ °è»êÀ» À§ÇÑ ÀÓ½Ã À§Ä¡)
+    // ë‘ ì„ ë¶„ì˜ ì ‘ì  í•¨ìˆ˜ ì¶”ê°€ í•„ìš”
+    // ë‘ ì„ ë¶„ì˜ ì ‘ì ì„ ê³„ì‚°í•˜ê¸° ìœ„í•´ ê° ì„ ë¶„ì˜ ì‹œìž‘ì ê³¼ ëì ì˜ ì¢Œí‘œë¥¼ ë³€ìˆ˜ì— ì €ìž¥í•©ë‹ˆë‹¤.
+    float x1 = linePt[0].x, y1 = linePt[0].y; // ì²« ë²ˆì§¸ ì„ ë¶„ì˜ ì‹œìž‘ì  ì¢Œí‘œ
+    float x2 = linePt[1].x, y2 = linePt[1].y; // ì²« ë²ˆì§¸ ì„ ë¶„ì˜ ëì  ì¢Œí‘œ
+    float x3 = linePt[2].x, y3 = linePt[2].y; // ë‘ ë²ˆì§¸ ì„ ë¶„ì˜ ì‹œìž‘ì  ì¢Œí‘œ
+    float x4 = linePt[3].x, y4 = linePt[3].y; // ë‘ ë²ˆì§¸ ì„ ë¶„ì˜ ëì  ì¢Œí‘œ
+
+    // ì„ ë¶„ì´ êµì°¨í•˜ëŠ”ì§€ í™•ì¸í•˜ê¸° ìœ„í•œ ë¶„ëª¨ ê°’ ê³„ì‚°
+    float denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+
+    // ë¶„ëª¨ ê°’ì´ 0ì´ ì•„ë‹Œ ê²½ìš° ì„ ë¶„ë“¤ì´ êµì°¨í•  ìˆ˜ ìžˆìœ¼ë¯€ë¡œ ê³„ì‚°ì„ ê³„ì†í•©ë‹ˆë‹¤.
+    if (denom != 0) {
+        // uaì™€ ubëŠ” ê° ì„ ë¶„ì´ êµì°¨í•˜ëŠ” ì ì˜ ìœ„ì¹˜ë¥¼ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
+        float ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
+        float ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
+
+        // uaì™€ ubê°€ 0ê³¼ 1 ì‚¬ì´ì— ìžˆìœ¼ë©´ ë‘ ì„ ë¶„ì´ êµì°¨í•˜ëŠ” ê²ƒìž…ë‹ˆë‹¤.
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+            // êµì°¨ì ì˜ ì¢Œí‘œë¥¼ ê³„ì‚°í•©ë‹ˆë‹¤.
+            float intersectionX = x1 + ua * (x2 - x1);
+            float intersectionY = y1 + ua * (y2 - y1);
+    
     glColor3f(0.0, 1.0, 0.0);
     glPointSize(10.0);
     glBegin(GL_POINTS);
-    glVertex2f(0, 0);  // (0, 0) À§Ä¡¿¡ Á¡ Âï±â
+    glVertex2f(0, 0); 
     glEnd();
 
-    // È­¸é¿¡ ±×¸° ±×·¡ÇÈÀ» È­¸é¿¡ Ç¥½Ã
     glutSwapBuffers();
 }
 
-// Å°º¸µå ÀÔ·ÂÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+// Å°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
-    case 'w':  // 'w' Å°¸¦ ´©¸£¸é y ÁÂÇ¥ Áõ°¡
+    case 'w':  // 'w' Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ y ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         linePt[0].y += 0.1f;
         linePt[1].y += 0.1f;
         break;
-    case 's':  // 's' Å°¸¦ ´©¸£¸é y ÁÂÇ¥ °¨¼Ò
+    case 's':  // 's' Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ y ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         linePt[0].y -= 0.1f;
         linePt[1].y -= 0.1f;
         break;
-    case 'a':  // 'a' Å°¸¦ ´©¸£¸é x ÁÂÇ¥ °¨¼Ò
+    case 'a':  // 'a' Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ x ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         linePt[0].x -= 0.1f;
         linePt[1].x -= 0.1f;
         break;
-    case 'd':  // 'd' Å°¸¦ ´©¸£¸é x ÁÂÇ¥ Áõ°¡
+    case 'd':  // 'd' Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ x ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
         linePt[0].x += 0.1f;
         linePt[1].x += 0.1f;
         break;
-    case 27:  // ESC Å°¸¦ ´©¸£¸é ÇÁ·Î±×·¥ Á¾·á
+    case 27:  // ESC Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½
         exit(0);
         break;
     }
-    // È­¸éÀ» ´Ù½Ã ±×¸®µµ·Ï ¿äÃ»
+    // È­ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
     glutPostRedisplay();
 }
 
-// ¸ÞÀÎ ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 int main(int argc, char** argv) {
-    // GLUT ÃÊ±âÈ­
+    // GLUT ï¿½Ê±ï¿½È­
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(1480, 100);
 
-    // À©µµ¿ì »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     glutCreateWindow("OpenGL");
 
-    // ÄÝ¹é ÇÔ¼ö µî·Ï
+    // ï¿½Ý¹ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
 
-    // GLUT ÀÌº¥Æ® ·çÇÁ ½ÃÀÛ
+    // GLUT ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     glutMainLoop();
 
     return 0;

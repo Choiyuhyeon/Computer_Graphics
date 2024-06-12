@@ -1,82 +1,74 @@
-#include "gl/glut.h"  // GLUT ¶óÀÌºê·¯¸® Çì´õ Æ÷ÇÔ
-#include <cstdio>     // printf ÇÔ¼ö¸¦ »ç¿ëÇÏ±â À§ÇÑ Çì´õ
+#include "gl/glut.h"  // GLUT ë¼ì´ë¸ŒëŸ¬ë¦¬ í¬í•¨
+#include <cstdio>     // printf í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ê¸° ìœ„í•œ í—¤ë”
 
-// 2Â÷¿ø º¤ÅÍ ±¸Á¶Ã¼ Á¤ÀÇ
+// 2ì°¨ì› ë²¡í„° êµ¬ì¡°ì²´ ì •ì˜
 struct Vec2 {
     float x, y;
 };
 
-Vec2 mousePt = { 0, 0 };  // ¸¶¿ì½º ÁÂÇ¥¸¦ ÀúÀåÇÒ ±¸Á¶Ã¼ º¯¼ö ÃÊ±âÈ­
+Vec2 mousePt = { 0, 0 };  // ë§ˆìš°ìŠ¤ ì¢Œí‘œë¥¼ ì €ì¥í•  ë²¡í„° ì´ˆê¸°í™”
 
-// µğ½ºÇÃ·¹ÀÌ Äİ¹é ÇÔ¼ö
+// ê·¸ë˜í”½ ì¶œë ¥ í•¨ìˆ˜
 void display() {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);  // ¹è°æ»öÀ» Èò»öÀ¸·Î ¼³Á¤
-    glClear(GL_COLOR_BUFFER_BIT);          // »ö»ó ¹öÆÛ¸¦ Áö¿ì°í ¹è°æ»öÀ¸·Î Ã¤¿ò
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);  // ë°°ê²½ìƒ‰ì„ í°ìƒ‰ìœ¼ë¡œ ì„¤ì •
+    glClear(GL_COLOR_BUFFER_BIT);          // í™”ë©´ì„ ì§€ìš°ê³  ìƒˆë¡œ ê·¸ë¦¼
 
-    glColor3f(0.0f, 0.0f, 0.0f);  // ±×¸®±â »ö»óÀ» °ËÀº»öÀ¸·Î ¼³Á¤
-    glPointSize(10.0);            // Æ÷ÀÎÆ® Å©±â¸¦ 10À¸·Î ¼³Á¤
+    glColor3f(0.0f, 0.0f, 0.0f);  // ê·¸ë¦¬ê¸° ìƒ‰ìƒì„ ê²€ì€ìƒ‰ìœ¼ë¡œ ì„¤ì •
+    glPointSize(10.0);            // ì ì˜ í¬ê¸°ë¥¼ 10ìœ¼ë¡œ ì„¤ì •
 
-    glBegin(GL_POINTS);            // Á¡ ±×¸®±â ¸ğµå ½ÃÀÛ
-    glVertex2f(mousePt.x, mousePt.y);  // ÇöÀç ¸¶¿ì½º ÁÂÇ¥¿¡ Á¡ ±×¸®±â
-    glEnd();                        // Á¡ ±×¸®±â ¸ğµå Á¾·á
+    glBegin(GL_POINTS);            // ì  ê·¸ë¦¬ê¸° ì‹œì‘
+    glVertex2f(mousePt.x, mousePt.y);  // ë§ˆìš°ìŠ¤ ì¢Œí‘œì— ì  ê·¸ë¦¬ê¸°
+    glEnd();                        // ì  ê·¸ë¦¬ê¸° ì¢…ë£Œ
 
-    glutSwapBuffers();  // ÇÁ·ĞÆ®¿Í ¹é ¹öÆÛ¸¦ ±³Ã¼ÇÏ¿© µğ½ºÇÃ·¹ÀÌ ¾÷µ¥ÀÌÆ®
+    glutSwapBuffers();  // ë”ë¸” ë²„í¼ë§ì„ ì‚¬ìš©í•˜ì—¬ ê·¸ë˜í”½ ë²„í¼ êµì²´
 }
 
-// Å°º¸µå ÀÔ·Â Äİ¹é ÇÔ¼ö
+// í‚¤ë³´ë“œ ì…ë ¥ ì²˜ë¦¬ í•¨ìˆ˜
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
-    case 27:  // ESC Å°¸¦ ´­·¶À» ¶§
-        exit(0);  // ÇÁ·Î±×·¥ Á¾·á
+    case 27:  // ESC í‚¤ë¥¼ ëˆ„ë¥´ë©´
+        exit(0);  // í”„ë¡œê·¸ë¨ ì¢…ë£Œ
         break;
     }
-    glutPostRedisplay();  // µğ½ºÇÃ·¹ÀÌ Äİ¹é ÇÔ¼ö È£Ãâ
+    glutPostRedisplay();  // í™”ë©´ ë‹¤ì‹œ ê·¸ë¦¬ê¸° ìš”ì²­
 }
 
-// ¸¶¿ì½º ÁÂÇ¥ º¯È¯ ÇÔ¼ö
+// ë§ˆìš°ìŠ¤ ì¢Œí‘œ ë³€í™˜ í•¨ìˆ˜
 void mouseCoordinateTranslate(int winX, int winY) {
-    // À©µµ¿ì ÁÂÇ¥¸¦ Á¤±ÔÈ­µÈ OpenGL ÁÂÇ¥·Î º¯È¯ : viewportÁÂÇ¥°è
+    // ìœˆë„ìš° ì¢Œí‘œë¥¼ OpenGL ì¢Œí‘œë¡œ ë³€í™˜: viewport ì¢Œí‘œ
     mousePt.x = winX / 250.0 - 1;
     mousePt.y = (winY / 250.0 - 1) * (-1.0);
 }
 
-// ¸¶¿ì½º Å¬¸¯ ÀÌº¥Æ® Äİ¹é ÇÔ¼ö
+// ë§ˆìš°ìŠ¤ í´ë¦­ ì´ë²¤íŠ¸ ì²˜ë¦¬ í•¨ìˆ˜
 void mouse(int button, int state, int x, int y) {
-    printf("mouse: %d %d %d %d\n", button, state, x, y);  // ¸¶¿ì½º ÀÌº¥Æ® Á¤º¸ Ãâ·Â
-    if (state == GLUT_DOWN) {  // ¸¶¿ì½º ¹öÆ°ÀÌ ´­·ÈÀ» ¶§
-        mouseCoordinateTranslate(x, y);  // ¸¶¿ì½º ÁÂÇ¥ º¯È¯ ÇÔ¼ö È£Ãâ
+    printf("mouse: %d %d %d %d\n", button, state, x, y);  // ë§ˆìš°ìŠ¤ ì´ë²¤íŠ¸ ì •ë³´ ì¶œë ¥
+    if (state == GLUT_DOWN) {  // ë§ˆìš°ìŠ¤ ë²„íŠ¼ì´ ëˆŒë ¸ì„ ë•Œ
+        mouseCoordinateTranslate(x, y);  // ë§ˆìš°ìŠ¤ ì¢Œí‘œ ë³€í™˜ í•¨ìˆ˜ í˜¸ì¶œ
     }
-    glutPostRedisplay();  // µğ½ºÇÃ·¹ÀÌ Äİ¹é ÇÔ¼ö È£Ãâ
+    glutPostRedisplay();  // í™”ë©´ ë‹¤ì‹œ ê·¸ë¦¬ê¸° ìš”ì²­
 }
 
-// ¸¶¿ì½º µå·¡±× ÀÌº¥Æ® Äİ¹é ÇÔ¼ö
+// ë§ˆìš°ìŠ¤ ì´ë™ ì´ë²¤íŠ¸ ì²˜ë¦¬ í•¨ìˆ˜
 void mouseMotion(int x, int y) {
-    printf("mouse motion: %d %d\n", x, y);  // ¸¶¿ì½º ¸ğ¼Ç Á¤º¸ Ãâ·Â
-    mouseCoordinateTranslate(x, y);  // ¸¶¿ì½º ÁÂÇ¥ º¯È¯ ÇÔ¼ö È£Ãâ
-    glutPostRedisplay();  // µğ½ºÇÃ·¹ÀÌ Äİ¹é ÇÔ¼ö È£Ãâ
+    printf("mouse motion: %d %d\n", x, y);  // ë§ˆìš°ìŠ¤ ì´ë™ ì •ë³´ ì¶œë ¥
+    mouseCoordinateTranslate(x, y);  // ë§ˆìš°ìŠ¤ ì¢Œí‘œ ë³€í™˜ í•¨ìˆ˜ í˜¸ì¶œ
+    glutPostRedisplay();  // í™”ë©´ ë‹¤ì‹œ ê·¸ë¦¬ê¸° ìš”ì²­
 }
 
-// ¸¶¿ì½º ÆĞ½Ãºê ¸ğ¼Ç ÀÌº¥Æ® Äİ¹é ÇÔ¼ö (ÁÖ¼® Ã³¸®)
-// void mousePassiveMotion(int x, int y) {
-//     printf("mouse passive motion: %d %d\n", x, y);
-//     mouseCoordinateTranslate(x, y);
-//     glutPostRedisplay();
-// }
-
-// ¸ŞÀÎ ÇÔ¼ö
+// ì£¼ í”„ë¡œê·¸ë¨
 int main(int argc, char** argv) {
-    glutInit(&argc, argv);  // GLUT ÃÊ±âÈ­
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // µğ½ºÇÃ·¹ÀÌ ¸ğµå ¼³Á¤
-    glutInitWindowSize(500, 500);  // À©µµ¿ì Å©±â ¼³Á¤
-    glutInitWindowPosition(1480, 100);  // À©µµ¿ì À§Ä¡ ¼³Á¤
+    glutInit(&argc, argv);  // GLUT ì´ˆê¸°í™”
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);  // ê·¸ë˜í”½ ëª¨ë“œ ì„¤ì •
+    glutInitWindowSize(500, 500);  // ìœˆë„ìš° í¬ê¸° ì„¤ì •
+    glutInitWindowPosition(1480, 100);  // ìœˆë„ìš° ìœ„ì¹˜ ì„¤ì •
 
-    glutCreateWindow("OpenGL");  // À©µµ¿ì »ı¼º ¹× Å¸ÀÌÆ² ¼³Á¤
-    glutDisplayFunc(display);  // µğ½ºÇÃ·¹ÀÌ Äİ¹é ÇÔ¼ö µî·Ï
-    glutKeyboardFunc(keyboard);  // Å°º¸µå ÀÔ·Â Äİ¹é ÇÔ¼ö µî·Ï
-    glutMouseFunc(mouse);  // ¸¶¿ì½º ÀÌº¥Æ® Äİ¹é ÇÔ¼ö µî·Ï
-    glutMotionFunc(mouseMotion);  // ¸¶¿ì½º µå·¡±× ÀÌº¥Æ® Äİ¹é ÇÔ¼ö µî·Ï
-    //glutPassiveMotionFunc(mousePassiveMotion);  // ¸¶¿ì½º ÆĞ½Ãºê ¸ğ¼Ç ÀÌº¥Æ® Äİ¹é ÇÔ¼ö µî·Ï
-    glutMainLoop();  // GLUT ÀÌº¥Æ® ·çÇÁ ÁøÀÔ
+    glutCreateWindow("OpenGL");  // ìœˆë„ìš° ìƒì„±
+    glutDisplayFunc(display);  // ê·¸ë˜í”½ ì¶œë ¥ í•¨ìˆ˜ ë“±ë¡
+    glutKeyboardFunc(keyboard);  // í‚¤ë³´ë“œ ì…ë ¥ ì²˜ë¦¬ í•¨ìˆ˜ ë“±ë¡
+    glutMouseFunc(mouse);  // ë§ˆìš°ìŠ¤ í´ë¦­ ì´ë²¤íŠ¸ ì²˜ë¦¬ í•¨ìˆ˜ ë“±ë¡
+    glutMotionFunc(mouseMotion);  // ë§ˆìš°ìŠ¤ ì´ë™ ì´ë²¤íŠ¸ ì²˜ë¦¬ í•¨ìˆ˜ ë“±ë¡
+    glutMainLoop();  // GLUT ì´ë²¤íŠ¸ ë£¨í”„ ì‹œì‘
 
     return 0;
 }

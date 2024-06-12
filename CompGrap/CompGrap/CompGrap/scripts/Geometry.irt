@@ -1,0 +1,68 @@
+# Cylin(Pt Ctr, Vec Dir, Real r, int Cap) => Polygon
+# Box(Pt Pt, Real Dx, Real Dy, Real Dz) => Polygon 
+# Sphere(Vec Ctr, Real r) => Polygon
+
+resolution = 100;
+
+####################### Chair ########################
+Chair = Box(vector(-0.5, -0.5, 0), 1, 1, 0.01);
+Chair = Chair + Box(vector(-0.5, -0.5, 0), 0.01, 1, 1);
+
+########################## Leg ###############################
+C0 = Cylin(vector(-0.45, -0.45, 0), vector(0,0,-1.0),0.02, 3);
+C1 = Cylin(vector(-0.45, 0.45, 0), vector(0,0,-1.0),0.02, 3);
+C2 = Cylin(vector(0.45, 0.45, 0), vector(0,0,-1.0),0.02, 3);
+C3 = Cylin(vector(0.45, -0.45, 0), vector(0,0,-1.0),0.02, 3);
+
+Chair = Chair + C0;
+Chair = Chair + C1;
+Chair = Chair + C2;
+Chair = Chair + C3;
+
+Chair = Chair * tx(-1.0);
+Chair = Chair * tz(-0.5);
+attrib(Chair, "rgb", "255,255,0");
+############################## Monitor #########################
+Monitor = Box(vector(-0.2,-0.2,0), 0.4, 0.4, 0.01);
+
+Monitor = Monitor + Cylin(vector(0.01, 0.0, 0), vector(0,0,0.55),0.02, 3);
+Monitor = Monitor + Cylin(vector(0.01, 0.0, 0.5), vector(-0.05, 0,0), 0.015, 3);
+
+Monitor = Monitor + Box(vector(-0.04, -0.25, 0.25),0.001, 0.5, 0.5);
+
+############################# Clock ##############################
+Clock = Cylin(vector(0.5, 0, 1), vector(-0.01,0,0), 0.2,3);
+
+Clock = Clock + Sphere(vector(0.49, 0 , 1), 0.01);
+
+################################## HAND ###############################
+HourHand = Box(vector(0,-0.002, -0.02), -0.001, 0.004, 0.14);
+MinuteHand = Box(vector(0,-0.002,-0.02), -0.001, 0.004, 0.18);
+
+HourHand = HourHand * rx(301);
+MinuteHand = MinuteHand * rx(60);
+
+HourHand = HourHand*tx(0.485);
+HourHand = HourHand*tz(1);
+MinuteHand = MinuteHand * tx(0.485);
+MinuteHand = MinuteHand * tz(1);
+
+attrib(HourHand, "rgb", "0,0,255");
+attrib(MinuteHand, "rgb", "0,0,255");
+
+#######################################################################
+
+Room = list(Chair, Monitor, Clock, HourHand, MinuteHand);
+
+Room = Room * tz(1.5);
+
+save("Room.itd", Room);
+save("Room.obj", Room);
+
+free(Room);
+free(Chair);
+free(Monitor);
+free(Clock);
+free(HourHand);
+free(MinuteHand);
+exit();

@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "*.cpp": "cpp",
-    "vector": "cpp"
+    "vector": "cpp",
+    "9-1": "c"
   }
 }

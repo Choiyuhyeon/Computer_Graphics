@@ -1,0 +1,12 @@
+9주차 코드
+
+b1 = box(vector(0,0,0),1,1,1);               // 원점 (0,0,0)에서 시작하여 크기가 1x1x1인 정육면체(b1) 생성
+s1 = sphere(vector(0.5,0.5,0.5),sqrt(2)/2.0); // 중심이 (0.5,0.5,0.5)이고 반지름이 sqrt(2)/2인 구(s1) 생성
+itst1 = s1 * b1;                             // 구(s1)와 정육면체(b1)의 교집합을 itst1에 저장
+itst1 = itst1 * tx(-0.5) * ty(-0.5) * tz(-0.5); // itst1을 x, y, z 축 각각 -0.5만큼 평행 이동
+
+interact(list(axes,b1,s1));                  // 좌표축(axes), 정육면체(b1), 구(s1)을 화면에 표시
+interact(list(axes,itst1));                  // 좌표축(axes)와 교집합(itst1)을 화면에 표시
+save("mid0.obj",itst1);                      // 교집합(itst1)을 "mid0.obj" 파일로 저장
+
+21660/2

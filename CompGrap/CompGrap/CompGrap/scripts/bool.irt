@@ -1,0 +1,13 @@
+s1 = sphere(vector(0,0,0), 1);
+s2 = s1 * tx(0.7);
+
+interact(list(axes,s1,s2));
+
+sum = s1 + s2;
+diff = s1 - s2;
+itst = s1 * s2;
+
+save("sum.stl",sum);
+save("diff.stl",diff);
+save("itst.stl",itst);
+exit();

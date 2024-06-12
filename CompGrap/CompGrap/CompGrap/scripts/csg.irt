@@ -1,0 +1,22 @@
+resolution = 100;
+
+b1 = box(vector(0,0,0),1,1,1);
+s1 = sphere(vector(0.5,0.5,0.5),sqrt(2)/2.0);
+itst1 = s1 * b1;
+itst1 = itst1 * tx(-0.5) * ty(-0.5) * tz(-0.5);
+interact(list(axes,b1,s1));
+interact(list(axes,itst1));
+save("mid0.obj",itst1);
+
+s1 = cylin(vector(0,0,-1), vector(0,0,2), 0.45, 3);
+s2 = cylin(vector(0,-1,0), vector(0,2,0), 0.45, 3);
+s3 = cylin(vector(-1,0,0), vector(2,0,0), 0.45, 3);
+sum1 = s1 + s2 + s3;
+interact(list(axes,itst1, sum1));
+save("mid1.obj",sum1);
+
+result = itst1 - sum1;
+interact(list(axes,result));
+
+save("result.obj",result);
+exit();
